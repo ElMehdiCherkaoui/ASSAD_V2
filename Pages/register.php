@@ -40,12 +40,12 @@
                 Create your account
             </h2>
 
-            <?php if (!empty($error)): ?>
-            <p class="text-red-600 text-center mt-4"><?= $error ?></p>
-            <?php endif; ?>
+
 
             <form method="POST" class="mt-8 space-y-5" action="registerProcess.php">
-
+                <?php if ($_GET['error']): ?>
+                <p class="text-red-600 text-center mt-4"><?= $_GET['error'] ?></p>
+                <?php endif; ?>
                 <div>
                     <label class="block text-sm font-medium mb-1">Full Name</label>
                     <input type="text" name="name" required

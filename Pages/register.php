@@ -43,7 +43,7 @@
 
 
             <form method="POST" class="mt-8 space-y-5" action="registerProcess.php">
-                <?php if ($_GET['error']): ?>
+                <?php if (isset($_GET['error'])): "" ?>
                 <p class="text-red-600 text-center mt-4"><?= $_GET['error'] ?></p>
                 <?php endif; ?>
                 <div>

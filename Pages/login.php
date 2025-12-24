@@ -60,10 +60,8 @@
             </p>
 
             <form class="mt-8 space-y-5" method="POST" action="loginProcess.php">
-                <?php if (!empty($error)) : ?>
-                <div class="bg-red-100 text-red-700 border border-red-400 p-3 rounded mb-4">
-                    <?php echo $error; ?>
-                </div>
+                <?php if (isset($_GET['error'])): "" ?>
+                <p class="text-red-600 text-center mt-4"><?= $_GET['error'] ?></p>
                 <?php endif; ?>
 
                 <div>

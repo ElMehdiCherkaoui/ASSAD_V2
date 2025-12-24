@@ -1,7 +1,5 @@
 <?php
 
-
-
 class DataBase
 {
     private $host = "localhost";

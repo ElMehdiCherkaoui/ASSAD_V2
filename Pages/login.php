@@ -59,7 +59,7 @@
                 Access your ASSAD account
             </p>
 
-            <form class="mt-8 space-y-5" method="POST" action="loginProcess.php">
+            <form class="mt-8 space-y-5" method="POST" action="../controller/controleLogin.php">
                 <?php if (isset($_GET['error'])): "" ?>
                 <p class="text-red-600 text-center mt-4"><?= $_GET['error'] ?></p>
                 <?php endif; ?>

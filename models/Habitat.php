@@ -6,7 +6,7 @@ class Habitat
     private $typeClimat;
     private $description;
     private $zoneZoo;
-    public function __construct($idHab, $name, $typeClimat, $description, $zoneZoo)
+    public function __construct($idHab = null, $name = null, $typeClimat = null, $description = null, $zoneZoo = null)
     {
         $this->idHab = $idHab;
         $this->name = $name;
@@ -60,5 +60,17 @@ class Habitat
     public function setZoneZoo($zoneZoo)
     {
         $this->zoneZoo = $zoneZoo;
+    }
+    public function findAll()
+    {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $sql = "SELECT * FROM Habitats";
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 }

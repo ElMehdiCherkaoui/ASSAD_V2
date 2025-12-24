@@ -10,16 +10,9 @@ class Animal
     private $descriptionCourte;
     private $id_habitat;
 
-    public function __construct(
-        $idAni,
-        $name,
-        $espece,
-        $alimentation,
-        $image,
-        $paysOrigine,
-        $descriptionCourte,
-        $id_habitat
-    ) {
+
+    public function __construct($idAni = null, $name = null, $espece = null, $alimentation = null, $image = null, $paysOrigine = null, $descriptionCourte = null, $id_habitat = null)
+    {
         $this->idAni = $idAni;
         $this->name = $name;
         $this->espece = $espece;
@@ -30,78 +23,104 @@ class Animal
         $this->id_habitat = $id_habitat;
     }
 
+
     public function getIdAni()
     {
         return $this->idAni;
     }
-
     public function getName()
     {
         return $this->name;
     }
-
     public function setName($name)
     {
         $this->name = $name;
     }
-
     public function getEspece()
     {
         return $this->espece;
     }
-
     public function setEspece($espece)
     {
         $this->espece = $espece;
     }
-
     public function getAlimentation()
     {
         return $this->alimentation;
     }
-
     public function setAlimentation($alimentation)
     {
         $this->alimentation = $alimentation;
     }
-
     public function getImage()
     {
         return $this->image;
     }
-
     public function setImage($image)
     {
         $this->image = $image;
     }
-
     public function getPaysOrigine()
     {
         return $this->paysOrigine;
     }
-
     public function setPaysOrigine($paysOrigine)
     {
         $this->paysOrigine = $paysOrigine;
     }
-
     public function getDescriptionCourte()
     {
         return $this->descriptionCourte;
     }
-
     public function setDescriptionCourte($descriptionCourte)
     {
         $this->descriptionCourte = $descriptionCourte;
     }
-
     public function getIdHabitat()
     {
         return $this->id_habitat;
     }
-
     public function setIdHabitat($id_habitat)
     {
         $this->id_habitat = $id_habitat;
+    }
+
+
+    public function findAll()
+    {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $sql = "SELECT 
+                   *
+                FROM Animal a
+                LEFT JOIN Habitats h ON a.Habitat_ID = h.Hab_id";
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+
+
+    public function createAnimal()
+    {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $sql = "INSERT INTO Animal 
+                (animalName, espece, alimentation, image, paysOrigine, descriptionCourte, Habitat_ID)
+                VALUES (:animal, :espece, :alimentation, :image, :paysorigine, :descriptioncourte, :habitat_id)";
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":animal", $this->name);
+        $stmt->bindParam(":espece", $this->espece);
+        $stmt->bindParam(":alimentation", $this->alimentation);
+        $stmt->bindParam(":image", $this->image);
+        $stmt->bindParam(":paysorigine", $this->paysOrigine);
+        $stmt->bindParam(":descriptioncourte", $this->descriptionCourte);
+        $stmt->bindParam(":habitat_id", $this->id_habitat);
+
+        return $stmt->execute();
     }
 }

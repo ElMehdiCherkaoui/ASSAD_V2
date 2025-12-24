@@ -112,3 +112,4 @@ SELECT * FROM userComments;
 
 
 SELECT paysOrigine AS country, COUNT(*) AS total FROM Animal GROUP BY paysOrigine;
+

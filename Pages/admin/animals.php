@@ -45,32 +45,55 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                     </tr>
                 </thead>
+
                 <tbody class="divide-y divide-gray-200" id="animalContainer">
                     <?php
                     require_once '../../models/Animal.php';
                     require_once '../../config.php';
+
                     $animalModel = new Animal();
                     $allAnimals = $animalModel->findAll();
 
                     foreach ($allAnimals as $index => $animal) {
                         echo '<tr>';
+
                         echo '<td class="px-6 py-4">' . ($index + 1) . '</td>';
+
                         echo '<td class="px-6 py-4">' . htmlspecialchars($animal->animalName) . '</td>';
+
                         echo '<td class="px-6 py-4">' . htmlspecialchars($animal->espece) . '</td>';
+
                         echo '<td class="px-6 py-4">' . htmlspecialchars($animal->habitatsName) . '</td>';
+
                         echo '<td class="px-6 py-4">' . htmlspecialchars($animal->descriptionCourte) . '</td>';
+
                         echo '<td class="px-6 py-4">';
-                        echo '<img src="' . htmlspecialchars($animal->Image) . '" alt="' . htmlspecialchars($animal->animalName) . '" class="w-12 h-12 rounded">';
+                        echo '<img src="' . htmlspecialchars($animal->Image) . '" class="w-12 h-12 rounded">';
                         echo '</td>';
+
                         echo '<td class="px-6 py-4 space-x-2">';
-                        echo '<button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Edit</button>';
+
+                        echo '<button 
+        type="button"
+        class="editAnimalBtn bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+        data-id="' . $animal->Ani_id . '"
+        data-name="' . htmlspecialchars($animal->animalName) . '"
+        data-espece="' . htmlspecialchars($animal->espece) . '"
+        data-alimentation="' . htmlspecialchars($animal->alimentation) . '"
+        data-image="' . htmlspecialchars($animal->Image) . '"
+        data-pays="' . htmlspecialchars($animal->paysOrigine) . '"
+        data-description="' . htmlspecialchars($animal->descriptionCourte) . '"
+        data-habitat="' . $animal->Habitat_ID . '"
+    >Edit</button>';
+
                         echo '<button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>';
+
                         echo '</td>';
                         echo '</tr>';
                     }
-
                     ?>
                 </tbody>
+
 
             </table>
         </section>
@@ -170,66 +193,101 @@
             </div>
         </div>
 
+        <?php
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editAniId'])) {
+
+            $animal = new Animal(
+                $_POST['editAniId'],
+                $_POST['editAnimalName'],
+                $_POST['editEspece'],
+                $_POST['editAlimentation'],
+                $_POST['editImage'],
+                $_POST['editPaysOrigine'],
+                $_POST['editDescription'],
+                $_POST['editHabitat']
+            );
+
+            if ($animal->updateAnimal()) {
+                echo "<script>window.location.href = 'animals.php';</script>";
+                exit;
+            } else {
+                echo "<p class='text-red-500'>Error updating animal</p>";
+            }
+        }
+        ?>
+
 
 
         <div id="editAnimalModal"
-            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 ">
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
             <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative h-[40em] overflow-auto">
 
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-xl font-bold text-gray-800">Edit Animal</h2>
-                    <button id="closeEditModal" class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+                    <button type="button" id="closeEditModal"
+                        class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
                 </div>
 
-                <form id="editAnimalForm" class="space-y-4">
 
-                    <input type="hidden" id="editAniId">
+                <form id="editAnimalForm" method="POST" class="space-y-4">
+
+                    <input type="hidden" name="editAniId" id="editAniId">
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-600">Animal Name</label>
-                        <input type="text" id="editAnimalName"
-                            class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200" required>
+                        <label class="block text-sm font-medium">Animal Name</label>
+                        <input type="text" name="editAnimalName" id="editAnimalName" required
+                            class="w-full border px-3 py-2 rounded">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-600">Species</label>
-                        <input type="text" id="editEspece" class="w-full mt-1 px-4 py-2 border rounded-lg" required>
+                        <label class="block text-sm font-medium">Species</label>
+                        <input type="text" name="editEspece" id="editEspece" required
+                            class="w-full border px-3 py-2 rounded">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-600">Alimentation</label>
-                        <input type="text" id="editAlimentation" class="w-full mt-1 px-4 py-2 border rounded-lg"
-                            required>
+                        <label class="block text-sm font-medium">Alimentation</label>
+                        <input type="text" name="editAlimentation" id="editAlimentation" required
+                            class="w-full border px-3 py-2 rounded">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-600">Habitat</label>
-                        <select id="editHabitatSelect" class="w-full mt-1 px-4 py-2 border rounded-lg">
+                        <label class="block text-sm font-medium">Habitat</label>
+                        <select name="editHabitat" id="editHabitatSelect" class="w-full border px-3 py-2 rounded">
+                            <?php
+                            require_once '../../models/Habitat.php';
+                            $habitatModel = new Habitat();
+                            $allHabitats = $habitatModel->findAll();
+
+                            foreach ($allHabitats as $habitat) {
+                                echo '<option value="' . $habitat->Hab_id . '">' . htmlspecialchars($habitat->habitatsName) . '</option>';
+                            }
+                            ?>
                         </select>
+
+
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-600">Country of Origin</label>
-                        <input type="text" id="editPaysOrigine" class="w-full mt-1 px-4 py-2 border rounded-lg">
+                        <label class="block text-sm font-medium">Country of Origin</label>
+                        <input type="text" name="editPaysOrigine" id="editPaysOrigine"
+                            class="w-full border px-3 py-2 rounded">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-600">Image (URL or name)</label>
-                        <input type="text" id="editImage" class="w-full mt-1 px-4 py-2 border rounded-lg">
+                        <label class="block text-sm font-medium">Image</label>
+                        <input type="text" name="editImage" id="editImage" class="w-full border px-3 py-2 rounded">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-600">Description</label>
-                        <textarea id="editDescription" rows="3"
-                            class="w-full mt-1 px-4 py-2 border rounded-lg"></textarea>
+                        <label class="block text-sm font-medium">Description</label>
+                        <textarea name="editDescription" id="editDescription"
+                            class="w-full border px-3 py-2 rounded"></textarea>
                     </div>
 
-                    <div class="flex justify-end gap-3 pt-4">
-                        <button type="button" id="cancelEditBtn"
-                            class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
-                            Cancel
-                        </button>
-                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    <div class="flex justify-end gap-3">
+                        <button type="button" id="cancelEditBtn" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">
                             Save Changes
                         </button>
                     </div>
@@ -238,26 +296,59 @@
             </div>
         </div>
 
+
 </body>
 
 <script>
     const addModal = document.getElementById('addAnimalPopup');
-    const openBtn = document.getElementById('addAnimalBtn');
-    const closeBtn = document.getElementById('closeModal');
-    const cancelBtn = document.getElementById('cancelBtn');
+    const openAddBtn = document.getElementById('addAnimalBtn');
+    const closeAddBtn = document.getElementById('closeModal');
+    const cancelAddBtn = document.getElementById('cancelBtn');
+    const addForm = document.getElementById('addAnimalForm');
 
-    // Open modal
-    openBtn.addEventListener('click', () => {
+    openAddBtn.addEventListener('click', function() {
         addModal.classList.remove('hidden');
     });
 
-    // Close modal
-    [closeBtn, cancelBtn].forEach(btn => {
-        btn.addEventListener('click', () => {
-            addModal.classList.add('hidden');
-            // Optional: reset form
-            document.getElementById('addAnimalForm').reset();
+    closeAddBtn.addEventListener('click', function() {
+        addModal.classList.add('hidden');
+        addForm.reset();
+    });
+
+    cancelAddBtn.addEventListener('click', function() {
+        addModal.classList.add('hidden');
+        addForm.reset();
+    });
+
+    const editModal = document.getElementById('editAnimalModal');
+    const closeEditBtn = document.getElementById('closeEditModal');
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+    const editForm = document.getElementById('editAnimalForm');
+    const editButtons = document.querySelectorAll('.editAnimalBtn');
+
+    editButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            document.getElementById('editAniId').value = button.dataset.id;
+            document.getElementById('editAnimalName').value = button.dataset.name;
+            document.getElementById('editEspece').value = button.dataset.espece;
+            document.getElementById('editAlimentation').value = button.dataset.alimentation;
+            document.getElementById('editImage').value = button.dataset.image;
+            document.getElementById('editPaysOrigine').value = button.dataset.pays;
+            document.getElementById('editDescription').value = button.dataset.description;
+            document.getElementById('editHabitatSelect').value = button.dataset.habitat;
+
+            editModal.classList.remove('hidden');
         });
+    });
+
+    closeEditBtn.addEventListener('click', function() {
+        editModal.classList.add('hidden');
+        editForm.reset();
+    });
+
+    cancelEditBtn.addEventListener('click', function() {
+        editModal.classList.add('hidden');
+        editForm.reset();
     });
 </script>
 

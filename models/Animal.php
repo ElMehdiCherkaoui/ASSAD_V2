@@ -102,7 +102,6 @@ class Animal
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
-
     public function createAnimal()
     {
         $database = new Database();
@@ -123,20 +122,21 @@ class Animal
 
         return $stmt->execute();
     }
+
     public function updateAnimal()
     {
         $database = new Database();
         $db = $database->getConnection();
 
         $sql = "UPDATE Animal SET
-    animalName = :animal,
-    espece = :espece,
-    alimentation = :alimentation,
-    Image = :image,
-    paysOrigine = :paysorigine,
-    descriptionCourte = :descriptioncourte,
-    Habitat_ID = :habitat_id
-WHERE Ani_id = :idAni";
+        animalName = :animal,
+        espece = :espece,
+        alimentation = :alimentation,
+        Image = :image,
+        paysOrigine = :paysorigine,
+        descriptionCourte = :descriptioncourte,
+        Habitat_ID = :habitat_id
+        WHERE Ani_id = :idAni";
 
         $stmt = $db->prepare($sql);
         $stmt->bindParam(":animal", $this->name);
@@ -148,6 +148,16 @@ WHERE Ani_id = :idAni";
         $stmt->bindParam(":habitat_id", $this->id_habitat);
         $stmt->bindParam(":idAni", $this->idAni);
 
+        return $stmt->execute();
+    }
+
+    public function deleteAnimal($idAnii)
+    {
+        $database = new Database();
+        $db = $database->getConnection();
+        $sql = "DELETE FROM Animal WHERE Ani_id = :idAni";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":idAni", $idAnii);
         return $stmt->execute();
     }
 }

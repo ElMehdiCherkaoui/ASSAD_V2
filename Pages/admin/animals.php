@@ -1,3 +1,68 @@
+<?php
+require_once '../../models/Animal.php';
+require_once '../../config.php';
+
+$animalModel = new Animal();
+
+// ====== ADD ANIMAL ======
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['animalName'])) {
+    $animal = new Animal(
+        null,
+        $_POST['animalName'],
+        $_POST['espece'],
+        $_POST['alimentation'],
+        $_POST['Image'],
+        $_POST['paysOrigine'],
+        $_POST['Description'],
+        $_POST['habitat_id']
+    );
+
+    if ($animal->createAnimal()) {
+        header("Location: animals.php");
+        exit;
+    } else {
+        echo "<p class='text-red-500'>Error adding animal. Please try again.</p>";
+    }
+}
+
+// ====== EDIT ANIMAL ======
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editAniId'])) {
+    $animal = new Animal(
+        $_POST['editAniId'],
+        $_POST['editAnimalName'],
+        $_POST['editEspece'],
+        $_POST['editAlimentation'],
+        $_POST['editImage'],
+        $_POST['editPaysOrigine'],
+        $_POST['editDescription'],
+        $_POST['editHabitat']
+    );
+
+    if ($animal->updateAnimal()) {
+        header("Location: animals.php");
+        exit;
+    } else {
+        echo "<p class='text-red-500'>Error updating animal</p>";
+    }
+}
+
+// ====== DELETE ANIMAL ======
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
+    $animalToDelete = new Animal();
+
+    if ($animalToDelete->deleteAnimal($_POST['delete_id'])) {
+        header("Location: animals.php");
+        exit;
+    } else {
+        echo "<p class='text-red-500'>Failed to delete animal.</p>";
+    }
+}
+
+// ====== FETCH ALL ANIMALS ======
+$allAnimals = $animalModel->findAll();
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -59,34 +124,39 @@
 
                         echo '<td class="px-6 py-4">' . ($index + 1) . '</td>';
 
-                        echo '<td class="px-6 py-4">' . htmlspecialchars($animal->animalName) . '</td>';
+                        echo '<td class="px-6 py-4">' . $animal->animalName . '</td>';
 
-                        echo '<td class="px-6 py-4">' . htmlspecialchars($animal->espece) . '</td>';
+                        echo '<td class="px-6 py-4">' . $animal->espece . '</td>';
 
-                        echo '<td class="px-6 py-4">' . htmlspecialchars($animal->habitatsName) . '</td>';
+                        echo '<td class="px-6 py-4">' . $animal->habitatsName . '</td>';
 
-                        echo '<td class="px-6 py-4">' . htmlspecialchars($animal->descriptionCourte) . '</td>';
+                        echo '<td class="px-6 py-4">' . $animal->descriptionCourte . '</td>';
 
                         echo '<td class="px-6 py-4">';
-                        echo '<img src="' . htmlspecialchars($animal->Image) . '" class="w-12 h-12 rounded">';
+                        echo '<img src="' . $animal->Image . '" class="w-12 h-12 rounded">';
                         echo '</td>';
 
                         echo '<td class="px-6 py-4 space-x-2">';
 
                         echo '<button 
-        type="button"
-        class="editAnimalBtn bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-        data-id="' . $animal->Ani_id . '"
-        data-name="' . htmlspecialchars($animal->animalName) . '"
-        data-espece="' . htmlspecialchars($animal->espece) . '"
-        data-alimentation="' . htmlspecialchars($animal->alimentation) . '"
-        data-image="' . htmlspecialchars($animal->Image) . '"
-        data-pays="' . htmlspecialchars($animal->paysOrigine) . '"
-        data-description="' . htmlspecialchars($animal->descriptionCourte) . '"
-        data-habitat="' . $animal->Habitat_ID . '"
-    >Edit</button>';
+                        type="button"
+                        class="editAnimalBtn bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                        data-id="' . $animal->Ani_id . '"
+                        data-name="' . $animal->animalName . '"
+                        data-espece="' . $animal->espece . '"
+                        data-alimentation="' . $animal->alimentation . '"
+                        data-image="' . $animal->Image . '"
+                        data-pays="' . $animal->paysOrigine . '"
+                        data-description="' . $animal->descriptionCourte . '"
+                        data-habitat="' . $animal->Habitat_ID . '"
+                        >Edit</button>';
 
-                        echo '<button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>';
+                        echo '<form method="POST" style="display:inline;">
+                        <input type="hidden" name="delete_id" value="' . $animal->Ani_id . '">
+                        <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                        Delete
+                        </button>
+                        </form>';
 
                         echo '</td>';
                         echo '</tr>';
@@ -97,36 +167,7 @@
 
             </table>
         </section>
-        <?php
-        require_once '../../models/Animal.php';
-        require_once '../../config.php';
 
-        $animalModel = new Animal();
-
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['animalName'])) {
-            $animalModel = new Animal(
-                null,
-                $_POST['animalName'],
-                $_POST['espece'],
-                $_POST['alimentation'],
-                $_POST['Image'],
-                $_POST['paysOrigine'],
-                $_POST['Description'],
-                $_POST['habitat_id']
-            );
-
-            $success = $animalModel->createAnimal();
-
-            if ($success) {
-                echo "<script>window.location.href = 'animals.php';</script>";
-                exit;
-            } else {
-                echo "<p class='text-red-500'>Error adding animal. Please try again.</p>";
-            }
-        }
-        $allAnimals = (new Animal())->findAll();
-        ?>
 
 
         <div id="addAnimalPopup"
@@ -193,28 +234,7 @@
             </div>
         </div>
 
-        <?php
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editAniId'])) {
 
-            $animal = new Animal(
-                $_POST['editAniId'],
-                $_POST['editAnimalName'],
-                $_POST['editEspece'],
-                $_POST['editAlimentation'],
-                $_POST['editImage'],
-                $_POST['editPaysOrigine'],
-                $_POST['editDescription'],
-                $_POST['editHabitat']
-            );
-
-            if ($animal->updateAnimal()) {
-                echo "<script>window.location.href = 'animals.php';</script>";
-                exit;
-            } else {
-                echo "<p class='text-red-500'>Error updating animal</p>";
-            }
-        }
-        ?>
 
 
 

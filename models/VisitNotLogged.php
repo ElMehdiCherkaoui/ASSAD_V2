@@ -24,7 +24,19 @@ class VisitNotLogged extends User
 
         return $stmt->fetchObject();
     }
-    public function register(){
-        
+    public function register($name, $email, $role, $password, $status)
+    {
+        $database = new Database();
+        $db = $database->getConnection();
+        $sql = " INSERT INTO users (userName, userEmail, userRole, password_hash, userStatus)
+                VALUES (:name, :email, :role, :password, :status) ";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":name", $name);
+        $stmt->bindParam(":email", $email);
+        $stmt->bindParam(":role", $role);
+        $stmt->bindParam(":password", $password);
+        $stmt->bindParam(":status", $status);
+        $stmt->execute();
+        return "success";
     }
 }

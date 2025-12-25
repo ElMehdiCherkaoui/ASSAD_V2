@@ -61,6 +61,7 @@ class Habitat
     {
         $this->zoneZoo = $zoneZoo;
     }
+    
     public function findAll()
     {
         $database = new Database();
@@ -72,5 +73,62 @@ class Habitat
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+
+
+    public function createHabitat()
+    {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $sql = "INSERT INTO habitats 
+        (habitatsName, descriptionHab, typeClimat, zoo_zone)
+        VALUES 
+        (:habitatsName, :descriptionHab, :typeClimat, :zoo_zone)";
+
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindParam(':habitatsName', $this->name);
+        $stmt->bindParam(':descriptionHab', $this->description);
+        $stmt->bindParam(':typeClimat', $this->typeClimat);
+        $stmt->bindParam(':zoo_zone', $this->zoneZoo);
+
+        return $stmt->execute();
+    }
+    
+    public function updateHabitat($setidhab)
+    {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $sql = "UPDATE habitats SET
+        habitatsName = :habitatsName,
+        descriptionHab = :descriptionHab,
+        typeClimat = :typeClimat,
+        zoo_zone = :zoo_zone
+    WHERE Hab_id = :Hab_id";
+
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindParam(':habitatsName', $this->name);
+        $stmt->bindParam(':descriptionHab', $this->description);
+        $stmt->bindParam(':typeClimat', $this->typeClimat);
+        $stmt->bindParam(':zoo_zone', $this->zoneZoo);
+        $stmt->bindParam(':Hab_id', $setidhab);
+
+        return $stmt->execute();
+    }
+    
+    public function deleteHabitat($Hab_id)
+    {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $sql = "DELETE FROM habitats WHERE Hab_id = :Hab_id";
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindParam(':Hab_id', $Hab_id);
+
+        return $stmt->execute();
     }
 }

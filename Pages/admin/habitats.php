@@ -1,3 +1,43 @@
+<?php
+require_once '../../models/Habitat.php';
+require_once '../../config.php';
+
+if (isset($_POST['add_habitat'])) {
+
+    $habitat = new Habitat();
+    $habitat->setName($_POST['habitatsName']);
+    $habitat->setTypeClimat($_POST['typeClimat']);
+    $habitat->setZoneZoo($_POST['zoo_zone']);
+    $habitat->setDescription($_POST['descriptionHab']);
+
+    $habitat->createHabitat();
+
+    header("Location: habitats.php");
+    exit;
+}
+if (isset($_POST['update_habitat'])) {
+
+    $habitat = new Habitat();
+    $habitat->setName($_POST['habitatsName']);
+    $habitat->setTypeClimat($_POST['typeClimat']);
+    $habitat->setZoneZoo($_POST['zoo_zone']);
+    $habitat->setDescription($_POST['descriptionHab']);
+
+    $habitat->updateHabitat($_POST['Hab_id']);
+
+    header("Location: habitats.php");
+}
+if (isset($_POST['delete_id'])) {
+    $habitatToDelete = new Habitat();
+
+    if ($habitatToDelete->deleteHabitat($_POST['delete_id'])) {
+        header("Location: habitats.php");
+        exit;
+    }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -45,29 +85,55 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200" id="habitatContainer">
-                    <tr>
-                        <td class="px-6 py-4">1</td>
-                        <td class="px-6 py-4">Savanna</td>
-                        <td class="px-6 py-4">Tropical</td>
-                        <td class="px-6 py-4">North Zone</td>
-                        <td class="px-6 py-4">Open grassy areas for lions and herbivores.</td>
-                        <td class="px-6 py-4 space-x-2">
-                            <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Edit</button>
-                            <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4">2</td>
-                        <td class="px-6 py-4">Rainforest</td>
-                        <td class="px-6 py-4">Humid</td>
-                        <td class="px-6 py-4">East Zone</td>
-                        <td class="px-6 py-4">Dense forest areas for primates and birds.</td>
-                        <td class="px-6 py-4 space-x-2">
-                            <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Edit</button>
-                            <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
-                        </td>
-                    </tr>
+                    <?php
+                    require_once '../../models/Habitat.php';
+                    require_once '../../config.php';
+
+                    $habitatModel = new Habitat();
+                    $habitats = $habitatModel->findAll();
+
+                    foreach ($habitats as $habitat) {
+                        echo '<tr>';
+
+                        echo '<td class="px-6 py-4">' . $habitat->Hab_id . '</td>';
+                        echo '<td class="px-6 py-4">' . htmlspecialchars($habitat->habitatsName) . '</td>';
+                        echo '<td class="px-6 py-4">' . htmlspecialchars($habitat->typeClimat) . '</td>';
+                        echo '<td class="px-6 py-4">' . htmlspecialchars($habitat->zoo_zone) . '</td>';
+                        echo '<td class="px-6 py-4 w-[30em]">' . htmlspecialchars($habitat->descriptionHab) . '</td>';
+
+                        echo '<td class="px-6 py-4 space-x-2">';
+
+                        echo '
+                        <button
+                            class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 editHabitatBtn"
+                            data-id="' . $habitat->Hab_id . '"
+                            data-name="' . htmlspecialchars($habitat->habitatsName) . '"
+                            data-climat="' . htmlspecialchars($habitat->typeClimat) . '"
+                            data-zone="' . htmlspecialchars($habitat->zoo_zone) . '"
+                            data-desc="' . htmlspecialchars($habitat->descriptionHab) . '">
+                            Edit
+                        </button>
+                        ';
+
+
+
+                        echo '
+                        <form method="POST" style="display:inline;">
+                            <input type="hidden" name="delete_id" value="' . $habitat->Hab_id . '">
+                            <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                                onclick="return confirm(\'Are you sure you want to delete this habitat?\')">
+                                Delete
+                            </button>
+                        </form>
+                        ';
+
+
+                        echo '</td>';
+                        echo '</tr>';
+                    }
+                    ?>
                 </tbody>
+
             </table>
         </section>
 
@@ -75,36 +141,32 @@
 
 
     <div id="addHabitatsPopup"
-        class="hidden fixed flex inset-0 bg-black bg-opacity-50 items-center justify-center z-50 overflow-auto h-50">
+        class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-auto">
         <div class="bg-white rounded-xl p-6 w-full max-w-lg relative">
             <button id="closeModal" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800">&times;</button>
 
-            <h2 class="text-2xl font-bold mb-4">Add New Habitats</h2>
+            <h2 class="text-2xl font-bold mb-4">Add New Habitat</h2>
 
-            <form id="addAnimalForm" class="space-y-4">
+            <form method="POST" action="" class="space-y-4">
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Name</label>
-                    <input type="text" name="habitatsName" id="habitatsName" required
-                        class="mt-1 block w-full border rounded px-3 py-2">
+                    <label class="block text-sm font-medium">Name</label>
+                    <input type="text" name="habitatsName" required class="mt-1 block w-full border rounded px-3 py-2">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">typeClimat</label>
-                    <input type="text" name="typeClimat" id="typeClimat" required
-                        class="mt-1 block w-full border rounded px-3 py-2">
+                    <label class="block text-sm font-medium">Type Climat</label>
+                    <input type="text" name="typeClimat" required class="mt-1 block w-full border rounded px-3 py-2">
                 </div>
 
-
-
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">zoo_zone</label>
-                    <input type="text" name="zoo_zone" id="zoo_zone" required
-                        class="mt-1 block w-full border rounded px-3 py-2">
+                    <label class="block text-sm font-medium">Zoo Zone</label>
+                    <input type="text" name="zoo_zone" required class="mt-1 block w-full border rounded px-3 py-2">
                 </div>
+
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">descriptionHab</label>
-                    <input type="text" name="descriptionHab" id="descriptionHab" required
+                    <label class="block text-sm font-medium">Description</label>
+                    <input type="text" name="descriptionHab" required
                         class="mt-1 block w-full border rounded px-3 py-2">
                 </div>
 
@@ -112,63 +174,95 @@
                     <button type="button" id="cancelBtn" class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">
                         Cancel
                     </button>
-                    <button type="submit" id="addHabitatsForm"
+                    <button type="submit" name="add_habitat"
                         class="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600">
                         Add
                     </button>
                 </div>
+
             </form>
         </div>
     </div>
 
     <div id="editHabitatsModal"
-        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 ">
-        <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative h-[40em] overflow-auto">
-
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-bold text-gray-800">Edit Habitats</h2>
-                <button id="closeEditModal" class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
-            </div>
-
-            <form id="editHabitatForm" class="space-y-4">
-
-                <input type="hidden" id="edithabId">
-
+        class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 w-full max-w-lg relative">
+            <button id="closeEditModal"
+                class="absolute top-3 right-3 text-gray-500 hover:text-gray-800">&times;</button>
+            <h2 class="text-2xl font-bold mb-4">Edit Habitat</h2>
+            <form method="POST" class="space-y-4">
+                <input type="hidden" name="Hab_id" id="edithabId">
                 <div>
-                    <label class="block text-sm font-medium text-gray-600">Habitat Name</label>
-                    <input type="text" id="editHabitatName"
-                        class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200" required>
+                    <label class="block text-sm font-medium">Name</label>
+                    <input type="text" name="habitatsName" id="editHabitatName" required
+                        class="mt-1 block w-full border rounded px-3 py-2">
                 </div>
-
                 <div>
-                    <label class="block text-sm font-medium text-gray-600">typeClimat</label>
-                    <input type="text" id="edittypeClimat" class="w-full mt-1 px-4 py-2 border rounded-lg" required>
+                    <label class="block text-sm font-medium">Type Climat</label>
+                    <input type="text" name="typeClimat" id="edittypeClimat" required
+                        class="mt-1 block w-full border rounded px-3 py-2">
                 </div>
-
                 <div>
-                    <label class="block text-sm font-medium text-gray-600">zoo_zone</label>
-                    <input type="text" id="editzoo_zone" class="w-full mt-1 px-4 py-2 border rounded-lg" required>
+                    <label class="block text-sm font-medium">Zoo Zone</label>
+                    <input type="text" name="zoo_zone" id="editzoo_zone" required
+                        class="mt-1 block w-full border rounded px-3 py-2">
                 </div>
-
                 <div>
-                    <label class="block text-sm font-medium text-gray-600">Description</label>
-                    <textarea id="editDescription" rows="3" class="w-full mt-1 px-4 py-2 border rounded-lg"></textarea>
+                    <label class="block text-sm font-medium">Description</label>
+                    <input type="text" name="descriptionHab" id="editDescription" required
+                        class="mt-1 block w-full border rounded px-3 py-2">
                 </div>
-
-                <div class="flex justify-end gap-3 pt-4">
-                    <button type="button" id="cancelEditBtn" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
-                        Cancel
-                    </button>
-                    <button id="editHabitatForm" type="submit"
-                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                        Save Changes
-                    </button>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" id="cancelEditBtn"
+                        class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">Cancel</button>
+                    <button type="submit" name="update_habitat"
+                        class="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600">Update</button>
                 </div>
-
             </form>
         </div>
     </div>
+
 </body>
-<script src="../../asset/js/habitatsAdminPage.js"></script>
+<script>
+const addHabitatsPopup = document.getElementById("addHabitatsPopup");
+const openHabitatsPopup = document.getElementById("openHabitatsPopup");
+const closeModal = document.getElementById("closeModal");
+const cancelBtn = document.getElementById("cancelBtn");
+cancelBtn.addEventListener("click", () => {
+    addHabitatsPopup.classList.add("hidden");
+})
+closeModal.addEventListener("click", () => {
+    addHabitatsPopup.classList.add("hidden");
+})
+openHabitatsPopup.addEventListener("click", () => {
+    addHabitatsPopup.classList.remove("hidden");
+})
+
+const editModal = document.getElementById('editHabitatsModal');
+const closeEditBtn = document.getElementById('closeEditModal');
+const cancelEditBtn = document.getElementById('cancelEditBtn');
+
+const editButtons = document.querySelectorAll('.editHabitatBtn');
+
+editButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.getElementById('edithabId').value = btn.dataset.id;
+        document.getElementById('editHabitatName').value = btn.dataset.name;
+        document.getElementById('edittypeClimat').value = btn.dataset.climat;
+        document.getElementById('editzoo_zone').value = btn.dataset.zone;
+        document.getElementById('editDescription').value = btn.dataset.desc;
+
+        editModal.classList.remove('hidden');
+    });
+});
+
+closeEditBtn.addEventListener('click', () => {
+    editModal.classList.add('hidden');
+});
+
+cancelEditBtn.addEventListener('click', () => {
+    editModal.classList.add('hidden');
+});
+</script>
 
 </html>

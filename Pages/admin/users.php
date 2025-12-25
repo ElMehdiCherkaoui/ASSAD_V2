@@ -66,11 +66,11 @@
 
                  <tbody class="divide-y divide-gray-200" id="profileContainer">
                      <?php
-                        require_once '../../models/Admin.php';
+                        require_once '../../models/Users.php';
                         require_once '../../config.php';
 
-                        $admin = new Admin();
-                        $allUsers = $admin->listAllUsers();
+                        $User = new User();
+                        $allUsers = $User->listAllUsers();
 
                         foreach ($allUsers as $user) {
 

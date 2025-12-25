@@ -8,7 +8,7 @@ class User
     private $password;
     private $status;
 
-    public function __construct($idUser, $name, $email, $role, $password, $status)
+    public function __construct($idUser = null, $name = null, $email = null, $role = null, $password = null, $status = null)
     {
         $this->idUser = $idUser;
         $this->name = $name;
@@ -72,4 +72,24 @@ class User
     {
         $this->status = $status;
     }
+
+    
+    function listAllUsers()
+    {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $sql = "SELECT 
+        Users_id,
+        userName,
+        userEmail,
+        userRole,
+        userStatus
+    FROM users";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+
 }

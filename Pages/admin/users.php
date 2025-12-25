@@ -41,44 +41,75 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200" id="profileContainer">
-                    <tr>
-                        <td class="px-6 py-4">1</td>
-                        <td class="px-6 py-4">Ahmed B.</td>
-                        <td class="px-6 py-4">ahmed@example.com</td>
-                        <td class="px-6 py-4">Visitor</td>
-                        <td class="px-6 py-4 text-green-500 font-semibold">Active</td>
-                        <td class="px-6 py-4 space-x-2">
-                            <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Deactivate</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4">2</td>
-                        <td class="px-6 py-4">Fatima Z.</td>
-                        <td class="px-6 py-4">fatima@example.com</td>
-                        <td class="px-6 py-4">Guide</td>
-                        <td class="px-6 py-4 text-yellow-500 font-semibold">Pending</td>
-                        <td class="px-6 py-4 space-x-2">
-                            <button
-                                class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Approve</button>
-                            <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Deactivate</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4">3</td>
-                        <td class="px-6 py-4">Omar S.</td>
-                        <td class="px-6 py-4">omar@example.com</td>
-                        <td class="px-6 py-4">Guide</td>
-                        <td class="px-6 py-4 text-green-500 font-semibold">Active</td>
-                        <td class="px-6 py-4 space-x-2">
-                            <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Deactivate</button>
-                        </td>
-                    </tr>
+                    <?php
+                    require_once '../../models/Admin.php';
+                    require_once '../../config.php';
+
+                    $admin = new Admin();
+                    $allUsers = $admin->listAllUsers();
+
+                    foreach ($allUsers as $user) {
+
+
+                        if ($user->userStatus === 'Active') {
+                            $statusText = 'Active';
+                            $statusColor = 'text-green-500';
+                        } elseif ($user->userStatus === 'Pending') {
+                            $statusText = 'Pending';
+                            $statusColor = 'text-yellow-500';
+                        } else {
+                            $statusText = 'Disabled';
+                            $statusColor = 'text-red-500';
+                        }
+
+                        echo '<tr>';
+                        echo '<td class="px-6 py-4">' . $user->Users_id . '</td>';
+                        echo '<td class="px-6 py-4">' . htmlspecialchars($user->userName) . '</td>';
+                        echo '<td class="px-6 py-4">' . htmlspecialchars($user->userEmail) . '</td>';
+                        echo '<td class="px-6 py-4">' . htmlspecialchars($user->userRole) . '</td>';
+                        echo '<td class="px-6 py-4 ' . $statusColor . ' font-semibold">' . $statusText . '</td>';
+                        echo '<td class="px-6 py-4 space-x-2">';
+
+                        if ($user->userStatus === 'Pending') {
+                            echo '<form method="POST" style="display:inline;">
+            <input type="hidden" name="approve_id" value="' . $user->Users_id . '">
+            <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+                Approve
+            </button>
+          </form>';
+                        }
+
+                        if ($user->userStatus === 'Active') {
+                            echo '<form method="POST" style="display:inline;">
+            <input type="hidden" name="deactivate_id" value="' . $user->Users_id . '">
+            <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                Deactivate
+            </button>
+          </form>';
+                        }
+
+                        if ($user->userStatus === 'Disabled') {
+                            echo '<form method="POST" style="display:inline;">
+            <input type="hidden" name="activate_id" value="' . $user->Users_id . '">
+            <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+                Activate
+            </button>
+          </form>';
+                        }
+
+                        echo '</td>';
+                        echo '</tr>';
+                    }
+                    ?>
                 </tbody>
+
+
+
             </table>
         </section>
     </main>
 
 </body>
-<script src="../../asset/js/userAdminPage.js"></script>
+
 
 </html>

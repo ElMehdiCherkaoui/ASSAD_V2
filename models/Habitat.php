@@ -62,6 +62,10 @@ class Habitat
         $this->zoneZoo = $zoneZoo;
     }
     
+        public function __toString()
+    {
+        return "Habitat (ID: {$this->idHab}, Name: {$this->name}, Climate: {$this->typeClimat}, Zone: {$this->zoneZoo}, Description: {$this->description})";
+    }
     public function findAll()
     {
         $database = new Database();

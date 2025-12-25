@@ -104,4 +104,9 @@ class VisiteGuidee
     {
         $this->userGuideId = $userGuideId;
     }
+
+    public function __toString()
+    {
+        return "VisiteGuidee (ID: {$this->idVisitGuide}, Title: {$this->titleVisit}, Date/Time: {$this->dateHeureGuide}, Language: {$this->languageGuide}, Capacity: {$this->capacityMax}, Status: {$this->statusGuide}, Duration: {$this->dureeGuide}, Guide User ID: {$this->userGuideId})";
+    }
 }

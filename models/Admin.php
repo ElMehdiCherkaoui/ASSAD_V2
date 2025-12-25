@@ -7,7 +7,12 @@ class Admin extends User
     {
         parent::__construct($idUser, $name, $email, $role, $password);
     }
-    
+
+    public function __toString(): string 
+    {
+        return "Admin (ID: {$this->getIdUser()}, Name: {$this->getName()}, Email: {$this->getEmail()}, Role: {$this->getRole()})";
+    }
+
     function changeStatus($userId, $statusChangee)
     {
         $database = new Database();

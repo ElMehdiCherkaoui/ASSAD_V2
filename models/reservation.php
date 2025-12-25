@@ -65,4 +65,9 @@ class Reservation
     {
         $this->dateReservation = $dateReservation;
     }
+
+        public function __toString()
+    {
+        return "Reservation (ID: {$this->idReservation}, GuideVisitID: {$this->guideVisitReservationId}, UserID: {$this->utilisateurReservationId}, Persons: {$this->nbPersonnes}, Date: {$this->dateReservation})";
+    }
 }

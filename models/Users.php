@@ -1,12 +1,12 @@
 <?php
 class User
 {
-    private $idUser;
-    private $name;
-    private $email;
-    private $role;
-    private $password;
-    private $status;
+    private int $idUser;
+    private string $name;
+    private string $email;
+    private string $role;
+    private string $password;
+    private string $status;
 
     public function __construct($idUser = null, $name = null, $email = null, $role = null, $password = null, $status = null)
     {
@@ -73,23 +73,22 @@ class User
         $this->status = $status;
     }
 
-    
+    public function __toString()
+    {
+        return "User (ID: {$this->idUser}, Name: {$this->name}, Email: {$this->email}, Role: {$this->role}, Status: {$this->status})";
+    }
+
+
     function listAllUsers()
     {
         $database = new Database();
         $db = $database->getConnection();
 
         $sql = "SELECT 
-        Users_id,
-        userName,
-        userEmail,
-        userRole,
-        userStatus
-    FROM users";
+        *SELECT * FROM users WHERE userRole != 'Admin'";
         $stmt = $db->prepare($sql);
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
-
 }

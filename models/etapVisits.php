@@ -65,4 +65,9 @@ class EtapVisits
     {
         $this->visitGuideEtapId = $visitGuideEtapId;
     }
+    public function __toString()
+{
+    return "EtapVisits (ID: {$this->idEtapVisit}, Title: {$this->titleEtap}, Description: {$this->descriptionEtap}, Order: {$this->orderEtap}, VisitGuideID: {$this->visitGuideEtapId})";
+}
+
 }

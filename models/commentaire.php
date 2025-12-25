@@ -78,4 +78,9 @@ class Commentaire
     {
         $this->dateCommentaire = $dateCommentaire;
     }
+    public function __toString(): string 
+{
+    return "Commentaire (ID: {$this->commentaireId}, VisitGuideID: {$this->visitGuideCommentaireId}, UserID: {$this->utilisateurCommentaireId}, Note: {$this->note}, Text: {$this->texte}, Date: {$this->dateCommentaire})";
+}
+
 }

@@ -84,6 +84,11 @@ class Animal
     {
         $this->id_habitat = $id_habitat;
     }
+    
+    public function __toString()
+    {
+        return "Animal (ID: {$this->idAni}, Name: {$this->name}, Espece: {$this->espece}, Alimentation: {$this->alimentation}, Image: {$this->image}, PaysOrigine: {$this->paysOrigine}, Description: {$this->descriptionCourte}, HabitatID: {$this->id_habitat})";
+    }
 
 
     public function findAll()

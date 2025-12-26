@@ -21,7 +21,7 @@
             <a href="animals.php" class="block px-6 py-3 hover:bg-gray-800">Animals</a>
             <a href="habitats.php" class="block px-6 py-3 hover:bg-gray-800">Habitats</a>
             <a href="stats.php" class="block px-6 py-3 hover:bg-gray-80 font-semibold">Statistics</a>
-            <a href="logout.php" class="block px-6 py-3 text-red-400 hover:bg-gray-800">Logout</a>
+            <a href="../../logout.php" class="block px-6 py-3 text-red-400 hover:bg-gray-800">Logout</a>
 
         </nav>
     </aside>

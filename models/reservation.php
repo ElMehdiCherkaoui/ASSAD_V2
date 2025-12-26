@@ -20,53 +20,16 @@ class Reservation
         $this->nbPersonnes = $nbPersonnes;
         $this->dateReservation = $dateReservation;
     }
-
-    public function getIdReservation()
+    public function __get($name)
     {
-        return $this->idReservation;
+        return $this->$name;
+    }
+    public function __set($name, $value)
+    {
+        $this->$name = $value;
     }
 
-    public function getGuideVisitReservationId()
-    {
-        return $this->guideVisitReservationId;
-    }
-
-    public function setGuideVisitReservationId($guideVisitReservationId)
-    {
-        $this->guideVisitReservationId = $guideVisitReservationId;
-    }
-
-    public function getUtilisateurReservationId()
-    {
-        return $this->utilisateurReservationId;
-    }
-
-    public function setUtilisateurReservationId($utilisateurReservationId)
-    {
-        $this->utilisateurReservationId = $utilisateurReservationId;
-    }
-
-    public function getNbPersonnes()
-    {
-        return $this->nbPersonnes;
-    }
-
-    public function setNbPersonnes($nbPersonnes)
-    {
-        $this->nbPersonnes = $nbPersonnes;
-    }
-
-    public function getDateReservation()
-    {
-        return $this->dateReservation;
-    }
-
-    public function setDateReservation($dateReservation)
-    {
-        $this->dateReservation = $dateReservation;
-    }
-
-        public function __toString()
+    public function __toString()
     {
         return "Reservation (ID: {$this->idReservation}, GuideVisitID: {$this->guideVisitReservationId}, UserID: {$this->utilisateurReservationId}, Persons: {$this->nbPersonnes}, Date: {$this->dateReservation})";
     }

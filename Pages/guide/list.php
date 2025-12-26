@@ -31,7 +31,7 @@
             <a href="list.php" class="block px-6 py-3 bg-green-800 font-semibold rounded-lg">My Visits</a>
             <a href="create.php" class="block px-6 py-3 hover:bg-green-800 rounded-lg">Create Visit</a>
             <a href="bookings.php" class="block px-6 py-3 hover:bg-green-800 rounded-lg">Bookings</a>
-            <a href="logout.php" class="block px-6 py-3 hover:bg-red-600 text-red-300 rounded-lg">Logout</a>
+            <a href="../../logout.php" class="block px-6 py-3 hover:bg-red-600 text-red-300 rounded-lg">Logout</a>
         </nav>
     </aside>
 
@@ -53,46 +53,46 @@
                             <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
                             <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
                         </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200" id="guidesContainers">
+                        <?php
+                        session_start();
+                        require_once "../../models/VisiteGuidee.php";
+                        require_once "../../config.php";
+
+                        $visit = new VisiteGuidee();
+                        $visits = $visit->listGuideVisit($_SESSION['user_id']);
+
+
+                        if (!empty($visits)) :
+                            foreach ($visits as $v) :
+
+                                $statusClass = $v['statut'] === 'Active' ? 'text-green-600' : 'text-red-600'; ?>
+
                         <tr>
-                            <td class="px-6 py-4">African Safari Tour</td>
-                            <td class="px-6 py-4">2025-01-10 10:00</td>
-                            <td class="px-6 py-4">English</td>
-                            <td class="px-6 py-4">15</td>
-                            <td class="px-6 py-4">price</td>
-                            <td class="px-6 py-4"><span class="text-green-600 font-semibold">Active</span></td>
+                            <td class="px-6 py-4"><?= $v['title'] ?></td>
+                            <td class="px-6 py-4"><?= $v['date_time'] ?></td>
+                            <td class="px-6 py-4"><?= $v['languages'] ?></td>
+                            <td class="px-6 py-4"><?= $v['max_capacity'] ?></td>
+                            <td class="px-6 py-4"><?= $v['price'] ?> MAD</td>
+                            <td class="px-6 py-4"><span
+                                    class="<?= $statusClass ?> font-semibold"><?= htmlspecialchars($v['statut']) ?></span>
+                            </td>
                             <td class="px-6 py-4 space-x-2">
-                                <button
-                                    class="px-3 py-1 bg-secondary text-black rounded hover:bg-amber-400">Edit</button>
-                                <button class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Cancel</button>
+                                <a href="edit_visit.php?id=<?= $v['guided_id'] ?>"
+                                    class="px-3 py-1 bg-secondary text-black rounded hover:bg-amber-400">Edit</a>
+                                <a href="cancel_visit.php?id=<?= $v['guided_id'] ?>"
+                                    class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                                    onclick="return confirm('Are you sure you want to cancel this visit?')">Cancel</a>
                             </td>
                         </tr>
+                        <?php
+                            endforeach;
+                        else:
+                            ?>
                         <tr>
-                            <td class="px-6 py-4">Lion Exploration</td>
-                            <td class="px-6 py-4">2025-01-12 14:00</td>
-                            <td class="px-6 py-4">French</td>
-                            <td class="px-6 py-4">12</td>
-                            <td class="px-6 py-4"><span class="text-yellow-600 font-semibold">Pending</span></td>
-                            <td class="px-6 py-4 space-x-2">
-                                <button
-                                    class="px-3 py-1 bg-secondary text-black rounded hover:bg-amber-400">Edit</button>
-                                <button class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Cancel</button>
-                            </td>
+                            <td colspan="7" class="text-center py-4">No visits found.</td>
                         </tr>
-                        <tr>
-                            <td class="px-6 py-4">Bird Paradise</td>
-                            <td class="px-6 py-4">2025-01-15 09:30</td>
-                            <td class="px-6 py-4">English</td>
-                            <td class="px-6 py-4">20</td>
-                            <td class="px-6 py-4"><span class="text-green-600 font-semibold">Active</span></td>
-                            <td class="px-6 py-4 space-x-2">
-                                <button
-                                    class="px-3 py-1 bg-secondary text-black rounded hover:bg-amber-400">Edit</button>
-                                <button class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Cancel</button>
-                            </td>
-                        </tr>
-                    </tbody>
+                        <?php endif; ?>
+
                 </table>
             </div>
         </section>

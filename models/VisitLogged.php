@@ -6,8 +6,9 @@ class VisitLogged extends User
     {
         parent::__construct($name, $email, $role, $password, $status);
     }
-    public function __toString()
+    public function __toString(): string
     {
-        return "Visitor (ID: {$this->getIdUser()}, Name: {$this->getName()}, Email: {$this->getEmail()}, Role: {$this->getRole()}, Status: {$this->getStatus()})";
+        return "Visitor (ID: {$this->idUser}, Name: {$this->name}, Email: {$this->email}, Role: {$this->role}, Status: {$this->status})";
     }
+
 }

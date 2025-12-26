@@ -11,14 +11,14 @@ class VisiteGuidee
     private $userGuideId;
 
     public function __construct(
-        $idVisitGuide,
-        $titleVisit,
-        $dateHeureGuide,
-        $languageGuide,
-        $capacityMax,
-        $statusGuide,
-        $dureeGuide,
-        $userGuideId
+        $idVisitGuide = null,
+        $titleVisit = null,
+        $dateHeureGuide = null,
+        $languageGuide = null,
+        $capacityMax = null,
+        $statusGuide = null,
+        $dureeGuide = null,
+        $userGuideId = null
     ) {
         $this->idVisitGuide = $idVisitGuide;
         $this->titleVisit = $titleVisit;
@@ -29,84 +29,90 @@ class VisiteGuidee
         $this->dureeGuide = $dureeGuide;
         $this->userGuideId = $userGuideId;
     }
-
-    public function getIdVisitGuide()
+    public function __get($name)
     {
-        return $this->idVisitGuide;
+        return $this->$name;
     }
-
-    public function getTitleVisit()
+    public function __set($name, $value)
     {
-        return $this->titleVisit;
-    }
-
-    public function setTitleVisit($titleVisit)
-    {
-        $this->titleVisit = $titleVisit;
-    }
-
-    public function getDateHeureGuide()
-    {
-        return $this->dateHeureGuide;
-    }
-
-    public function setDateHeureGuide($dateHeureGuide)
-    {
-        $this->dateHeureGuide = $dateHeureGuide;
-    }
-
-    public function getLanguageGuide()
-    {
-        return $this->languageGuide;
-    }
-
-    public function setLanguageGuide($languageGuide)
-    {
-        $this->languageGuide = $languageGuide;
-    }
-
-    public function getCapacityMax()
-    {
-        return $this->capacityMax;
-    }
-
-    public function setCapacityMax($capacityMax)
-    {
-        $this->capacityMax = $capacityMax;
-    }
-
-    public function getStatusGuide()
-    {
-        return $this->statusGuide;
-    }
-
-    public function setStatusGuide($statusGuide)
-    {
-        $this->statusGuide = $statusGuide;
-    }
-
-    public function getDureeGuide()
-    {
-        return $this->dureeGuide;
-    }
-
-    public function setDureeGuide($dureeGuide)
-    {
-        $this->dureeGuide = $dureeGuide;
-    }
-
-    public function getUserGuideId()
-    {
-        return $this->userGuideId;
-    }
-
-    public function setUserGuideId($userGuideId)
-    {
-        $this->userGuideId = $userGuideId;
+        $this->$name = $value;
     }
 
     public function __toString()
     {
         return "VisiteGuidee (ID: {$this->idVisitGuide}, Title: {$this->titleVisit}, Date/Time: {$this->dateHeureGuide}, Language: {$this->languageGuide}, Capacity: {$this->capacityMax}, Status: {$this->statusGuide}, Duration: {$this->dureeGuide}, Guide User ID: {$this->userGuideId})";
+    }
+
+    public function listGuideVisit(int $guideId): array
+    {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $sql = "SELECT * FROM visitesGuidees WHERE user_guide_id = :guideId";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':guideId', $guideId);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    public function create(): bool
+    {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $sql = "INSERT INTO visitesGuidees 
+                (title, date_time, duree, languages, max_capacity, price, statut, user_guide_id)
+                VALUES (:title, :date_time, :duree, :languages, :max_capacity, :price, :statut, :user_guide_id)";
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':title', $this->title);
+        $stmt->bindParam(':date_time', $this->dateTime);
+        $stmt->bindParam(':duree', $this->duration);
+        $stmt->bindParam(':languages', $this->language);
+        $stmt->bindParam(':max_capacity', $this->capacity);
+        $stmt->bindParam(':price', $this->price);
+        $stmt->bindParam(':statut', $this->status);
+        $stmt->bindParam(':user_guide_id', $this->idGuide);
+
+        return $stmt->execute();
+    }
+
+    public function update(): bool
+    {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $sql = "UPDATE visitesGuidees SET
+                    title = :title,
+                    date_time = :date_time,
+                    duree = :duree,
+                    languages = :languages,
+                    max_capacity = :max_capacity,
+                    price = :price
+                WHERE guided_id = :idVisite";
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':title', $this->title);
+        $stmt->bindParam(':date_time', $this->dateTime);
+        $stmt->bindParam(':duree', $this->duration);
+        $stmt->bindParam(':languages', $this->language);
+        $stmt->bindParam(':max_capacity', $this->capacity);
+        $stmt->bindParam(':price', $this->price);
+        $stmt->bindParam(':idVisite', $this->idVisite);
+        return $stmt->execute();
+    }
+
+    public function cancel(): bool
+    {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $sql = "UPDATE visitesGuidees SET statut = :status WHERE guided_id = :idVisite";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':status', $this->status);
+        $stmt->bindParam(':idVisite', $this->idVisite);
+        return $stmt->execute();
     }
 }

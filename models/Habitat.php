@@ -14,55 +14,17 @@ class Habitat
         $this->description = $description;
         $this->zoneZoo = $zoneZoo;
     }
-    public function getIdHab()
+
+    public function __get($name)
     {
-        return $this->idHab;
+        return $this->$name;
+    }
+    public function __set($name, $value)
+    {
+        $this->$name = $value;
     }
 
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-
-    public function getTypeClimat()
-    {
-        return $this->typeClimat;
-    }
-
-    public function setTypeClimat($typeClimat)
-    {
-        $this->typeClimat = $typeClimat;
-    }
-
-
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-
-    public function getZoneZoo()
-    {
-        return $this->zoneZoo;
-    }
-
-    public function setZoneZoo($zoneZoo)
-    {
-        $this->zoneZoo = $zoneZoo;
-    }
-    
-        public function __toString()
+    public function __toString()
     {
         return "Habitat (ID: {$this->idHab}, Name: {$this->name}, Climate: {$this->typeClimat}, Zone: {$this->zoneZoo}, Description: {$this->description})";
     }
@@ -99,7 +61,7 @@ class Habitat
 
         return $stmt->execute();
     }
-    
+
     public function updateHabitat($setidhab)
     {
         $database = new Database();
@@ -122,7 +84,7 @@ class Habitat
 
         return $stmt->execute();
     }
-    
+
     public function deleteHabitat($Hab_id)
     {
         $database = new Database();

@@ -5,10 +5,10 @@ require_once '../../config.php';
 if (isset($_POST['add_habitat'])) {
 
     $habitat = new Habitat();
-    $habitat->setName($_POST['habitatsName']);
-    $habitat->setTypeClimat($_POST['typeClimat']);
-    $habitat->setZoneZoo($_POST['zoo_zone']);
-    $habitat->setDescription($_POST['descriptionHab']);
+    $habitat->__get($_POST['habitatsName']);
+    $habitat->__get($_POST['typeClimat']);
+    $habitat->__get($_POST['zoo_zone']);
+    $habitat->__get($_POST['descriptionHab']);
 
     $habitat->createHabitat();
 
@@ -18,10 +18,10 @@ if (isset($_POST['add_habitat'])) {
 if (isset($_POST['update_habitat'])) {
 
     $habitat = new Habitat();
-    $habitat->setName($_POST['habitatsName']);
-    $habitat->setTypeClimat($_POST['typeClimat']);
-    $habitat->setZoneZoo($_POST['zoo_zone']);
-    $habitat->setDescription($_POST['descriptionHab']);
+    $habitat->__get($_POST['habitatsName']);
+    $habitat->__get($_POST['typeClimat']);
+    $habitat->__get($_POST['zoo_zone']);
+    $habitat->__get($_POST['descriptionHab']);
 
     $habitat->updateHabitat($_POST['Hab_id']);
 
@@ -59,7 +59,7 @@ if (isset($_POST['delete_id'])) {
             <a href="animals.php" class="block px-6 py-3 hover:bg-gray-800">Animals</a>
             <a href="habitats.php" class="block px-6 py-3 bg-gray-800 font-semibold">Habitats</a>
             <a href="stats.php" class="block px-6 py-3 hover:bg-gray-800">Statistics</a>
-            <a href="logout.php" class="block px-6 py-3 text-red-400 hover:bg-gray-800">Logout</a>
+            <a href="../../logout.php" class="block px-6 py-3 text-red-400 hover:bg-gray-800">Logout</a>
         </nav>
     </aside>
 
@@ -224,45 +224,45 @@ if (isset($_POST['delete_id'])) {
 
 </body>
 <script>
-const addHabitatsPopup = document.getElementById("addHabitatsPopup");
-const openHabitatsPopup = document.getElementById("openHabitatsPopup");
-const closeModal = document.getElementById("closeModal");
-const cancelBtn = document.getElementById("cancelBtn");
-cancelBtn.addEventListener("click", () => {
-    addHabitatsPopup.classList.add("hidden");
-})
-closeModal.addEventListener("click", () => {
-    addHabitatsPopup.classList.add("hidden");
-})
-openHabitatsPopup.addEventListener("click", () => {
-    addHabitatsPopup.classList.remove("hidden");
-})
+    const addHabitatsPopup = document.getElementById("addHabitatsPopup");
+    const openHabitatsPopup = document.getElementById("openHabitatsPopup");
+    const closeModal = document.getElementById("closeModal");
+    const cancelBtn = document.getElementById("cancelBtn");
+    cancelBtn.addEventListener("click", () => {
+        addHabitatsPopup.classList.add("hidden");
+    })
+    closeModal.addEventListener("click", () => {
+        addHabitatsPopup.classList.add("hidden");
+    })
+    openHabitatsPopup.addEventListener("click", () => {
+        addHabitatsPopup.classList.remove("hidden");
+    })
 
-const editModal = document.getElementById('editHabitatsModal');
-const closeEditBtn = document.getElementById('closeEditModal');
-const cancelEditBtn = document.getElementById('cancelEditBtn');
+    const editModal = document.getElementById('editHabitatsModal');
+    const closeEditBtn = document.getElementById('closeEditModal');
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
 
-const editButtons = document.querySelectorAll('.editHabitatBtn');
+    const editButtons = document.querySelectorAll('.editHabitatBtn');
 
-editButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.getElementById('edithabId').value = btn.dataset.id;
-        document.getElementById('editHabitatName').value = btn.dataset.name;
-        document.getElementById('edittypeClimat').value = btn.dataset.climat;
-        document.getElementById('editzoo_zone').value = btn.dataset.zone;
-        document.getElementById('editDescription').value = btn.dataset.desc;
+    editButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.getElementById('edithabId').value = btn.dataset.id;
+            document.getElementById('editHabitatName').value = btn.dataset.name;
+            document.getElementById('edittypeClimat').value = btn.dataset.climat;
+            document.getElementById('editzoo_zone').value = btn.dataset.zone;
+            document.getElementById('editDescription').value = btn.dataset.desc;
 
-        editModal.classList.remove('hidden');
+            editModal.classList.remove('hidden');
+        });
     });
-});
 
-closeEditBtn.addEventListener('click', () => {
-    editModal.classList.add('hidden');
-});
+    closeEditBtn.addEventListener('click', () => {
+        editModal.classList.add('hidden');
+    });
 
-cancelEditBtn.addEventListener('click', () => {
-    editModal.classList.add('hidden');
-});
+    cancelEditBtn.addEventListener('click', () => {
+        editModal.classList.add('hidden');
+    });
 </script>
 
 </html>

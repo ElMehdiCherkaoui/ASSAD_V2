@@ -7,16 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                colors: {
-                    primary: '#14532d',
-                    secondary: '#f59e0b',
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#14532d',
+                        secondary: '#f59e0b',
+                    }
                 }
             }
         }
-    }
     </script>
 </head>
 
@@ -33,7 +33,7 @@
                 <a href="animalsLogged.php" class="hover:text-secondary">Animals</a>
                 <a href="create.php" class="hover:text-secondary">Guided Visits</a>
                 <a href="my-reservations.php" class="hover:text-secondary font-semibold">My Reservations</a>
-                <a href="logout.php" class="hover:text-red-400 font-semibold">Logout</a>
+                <a href="../../logout.php" class="hover:text-red-400 font-semibold">Logout</a>
             </nav>
         </div>
     </header>

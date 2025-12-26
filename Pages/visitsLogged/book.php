@@ -28,7 +28,7 @@
             <a href="animalsLogged.php" class="hover:text-secondary">Animals</a>
             <a href="create.php" class="hover:text-secondary">Guided Visits</a>
             <a href="my-reservations.php" class="hover:text-secondary">My Reservations</a>
-            <a href="logout.php" class="hover:text-red-400 font-semibold">Logout</a>
+            <a href="../../logout.php" class="hover:text-red-400 font-semibold">Logout</a>
         </nav>
     </header>
 

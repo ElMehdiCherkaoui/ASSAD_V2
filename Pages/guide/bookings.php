@@ -31,7 +31,7 @@
             <a href="list.php" class="block px-6 py-3 hover:bg-green-800 rounded-lg">My Visits</a>
             <a href="create.php" class="block px-6 py-3 hover:bg-green-800 rounded-lg">Create Visit</a>
             <a href="bookings.php" class="block px-6 py-3 bg-green-800 font-semibold rounded-lg">Bookings</a>
-            <a href="logout.php" class="block px-6 py-3 hover:bg-red-600 text-red-300 rounded-lg">Logout</a>
+            <a href="../../logout.php" class="block px-6 py-3 hover:bg-red-600 text-red-300 rounded-lg">Logout</a>
         </nav>
     </aside>
 

@@ -7,8 +7,10 @@ class Guide extends User
         parent::__construct($name, $email, $role, $password, $status);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return "Guide (ID: {$this->getIdUser()}, Name: {$this->getName()}, Email: {$this->getEmail()}, Role: {$this->getRole()}, Status: {$this->getStatus()})";
+        return "Guide (ID: {$this->idUser}, Name: {$this->name}, Email: {$this->email}, Role: {$this->role}, Status: {$this->status})";
     }
+
+
 }

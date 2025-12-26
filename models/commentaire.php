@@ -23,64 +23,16 @@ class Commentaire
         $this->texte = $texte;
         $this->dateCommentaire = $dateCommentaire;
     }
-
-    public function getCommentaireId()
+    public function __get($name)
     {
-        return $this->commentaireId;
+        return $this->$name;
     }
-
-    public function getVisitGuideCommentaireId()
+    public function __set($name, $value)
     {
-        return $this->visitGuideCommentaireId;
+        $this->$name = $value;
     }
-
-    public function setVisitGuideCommentaireId($visitGuideCommentaireId)
+    public function __toString(): string
     {
-        $this->visitGuideCommentaireId = $visitGuideCommentaireId;
+        return "Commentaire (ID: {$this->commentaireId}, VisitGuideID: {$this->visitGuideCommentaireId}, UserID: {$this->utilisateurCommentaireId}, Note: {$this->note}, Text: {$this->texte}, Date: {$this->dateCommentaire})";
     }
-
-    public function getUtilisateurCommentaireId()
-    {
-        return $this->utilisateurCommentaireId;
-    }
-
-    public function setUtilisateurCommentaireId($utilisateurCommentaireId)
-    {
-        $this->utilisateurCommentaireId = $utilisateurCommentaireId;
-    }
-
-    public function getNote()
-    {
-        return $this->note;
-    }
-
-    public function setNote($note)
-    {
-        $this->note = $note;
-    }
-
-    public function getTexte()
-    {
-        return $this->texte;
-    }
-
-    public function setTexte($texte)
-    {
-        $this->texte = $texte;
-    }
-
-    public function getDateCommentaire()
-    {
-        return $this->dateCommentaire;
-    }
-
-    public function setDateCommentaire($dateCommentaire)
-    {
-        $this->dateCommentaire = $dateCommentaire;
-    }
-    public function __toString(): string 
-{
-    return "Commentaire (ID: {$this->commentaireId}, VisitGuideID: {$this->visitGuideCommentaireId}, UserID: {$this->utilisateurCommentaireId}, Note: {$this->note}, Text: {$this->texte}, Date: {$this->dateCommentaire})";
-}
-
 }

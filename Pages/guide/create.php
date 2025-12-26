@@ -1,3 +1,45 @@
+<?php
+session_start();
+require_once "../../config.php";
+require_once "../../models/VisiteGuidee.php";
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../../login.php");
+    exit;
+}
+if (!empty($_POST['title']) && !empty($_POST['date'])) {
+    $title    = $_POST['title'];
+    $date     = $_POST['date'];
+    $duration = $_POST['duration'];
+    $language = $_POST['language'];
+    $status   = $_POST['Status'];
+    $capacity = $_POST['capacity'];
+    $price    = $_POST['price'];
+    $idGuide  = $_SESSION['user_id'];
+    $visit = new VisiteGuidee();
+    $visit->title     = $title;
+    $visit->dateTime  = $date;
+    $visit->duration  = $duration;
+    $visit->language  = $language;
+    $visit->capacity  = $capacity;
+    $visit->price     = $price;
+    $visit->status    = $status;
+    $visit->idGuide   = $idGuide;
+
+
+    if ($visit->create()) {
+        header("Location: list.php");
+        exit;
+    } else {
+        header("Location: create.php");
+        exit;
+    }
+}
+
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,7 +83,7 @@
         <p class="text-gray-500 mt-1 mb-6">Fill out the details below to schedule a new visit</p>
 
         <section class="bg-white rounded-xl shadow p-6 max-w-3xl">
-            <form class="space-y-6" id="formGuide">
+            <form class="space-y-6" id="formGuide" method="POST">
 
                 <div>
                     <label for="title" class="block text-gray-700 font-semibold mb-2">Visit Title</label>
@@ -123,6 +165,6 @@
     </main>
 
 </body>
-<script src="../../asset/js/GuideCreatePage.js"></script>
+
 
 </html>

@@ -83,7 +83,7 @@ if (isset($_POST['delete_id'])) {
             <a href="animals.php" class="block px-6 py-3 bg-gray-800 font-semibold">Animals</a>
             <a href="habitats.php" class="block px-6 py-3 hover:bg-gray-800">Habitats</a>
             <a href="stats.php" class="block px-6 py-3 hover:bg-gray-800">Statistics</a>
-            <a href="logout.php" class="block px-6 py-3 text-red-400 hover:bg-gray-800">Logout</a>
+            <a href="../../logout.php" class="block px-6 py-3 text-red-400 hover:bg-gray-800">Logout</a>
         </nav>
     </aside>
 
@@ -320,56 +320,56 @@ if (isset($_POST['delete_id'])) {
 </body>
 
 <script>
-const addModal = document.getElementById('addAnimalPopup');
-const openAddBtn = document.getElementById('addAnimalBtn');
-const closeAddBtn = document.getElementById('closeModal');
-const cancelAddBtn = document.getElementById('cancelBtn');
-const addForm = document.getElementById('addAnimalForm');
+    const addModal = document.getElementById('addAnimalPopup');
+    const openAddBtn = document.getElementById('addAnimalBtn');
+    const closeAddBtn = document.getElementById('closeModal');
+    const cancelAddBtn = document.getElementById('cancelBtn');
+    const addForm = document.getElementById('addAnimalForm');
 
-openAddBtn.addEventListener('click', function() {
-    addModal.classList.remove('hidden');
-});
-
-closeAddBtn.addEventListener('click', function() {
-    addModal.classList.add('hidden');
-
-});
-
-cancelAddBtn.addEventListener('click', function() {
-    addModal.classList.add('hidden');
-
-});
-
-const editModal = document.getElementById('editAnimalModal');
-const closeEditBtn = document.getElementById('closeEditModal');
-const cancelEditBtn = document.getElementById('cancelEditBtn');
-const editForm = document.getElementById('editAnimalForm');
-const editButtons = document.querySelectorAll('.editAnimalBtn');
-
-editButtons.forEach(function(button) {
-    button.addEventListener('click', function() {
-        document.getElementById('editAniId').value = button.dataset.id;
-        document.getElementById('editAnimalName').value = button.dataset.name;
-        document.getElementById('editEspece').value = button.dataset.espece;
-        document.getElementById('editAlimentation').value = button.dataset.alimentation;
-        document.getElementById('editImage').value = button.dataset.image;
-        document.getElementById('editPaysOrigine').value = button.dataset.pays;
-        document.getElementById('editDescription').value = button.dataset.description;
-        document.getElementById('editHabitatSelect').value = button.dataset.habitat;
-
-        editModal.classList.remove('hidden');
+    openAddBtn.addEventListener('click', function() {
+        addModal.classList.remove('hidden');
     });
-});
 
-closeEditBtn.addEventListener('click', function() {
-    editModal.classList.add('hidden');
-    editForm.reset();
-});
+    closeAddBtn.addEventListener('click', function() {
+        addModal.classList.add('hidden');
 
-cancelEditBtn.addEventListener('click', function() {
-    editModal.classList.add('hidden');
-    editForm.reset();
-});
+    });
+
+    cancelAddBtn.addEventListener('click', function() {
+        addModal.classList.add('hidden');
+
+    });
+
+    const editModal = document.getElementById('editAnimalModal');
+    const closeEditBtn = document.getElementById('closeEditModal');
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+    const editForm = document.getElementById('editAnimalForm');
+    const editButtons = document.querySelectorAll('.editAnimalBtn');
+
+    editButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            document.getElementById('editAniId').value = button.dataset.id;
+            document.getElementById('editAnimalName').value = button.dataset.name;
+            document.getElementById('editEspece').value = button.dataset.espece;
+            document.getElementById('editAlimentation').value = button.dataset.alimentation;
+            document.getElementById('editImage').value = button.dataset.image;
+            document.getElementById('editPaysOrigine').value = button.dataset.pays;
+            document.getElementById('editDescription').value = button.dataset.description;
+            document.getElementById('editHabitatSelect').value = button.dataset.habitat;
+
+            editModal.classList.remove('hidden');
+        });
+    });
+
+    closeEditBtn.addEventListener('click', function() {
+        editModal.classList.add('hidden');
+        editForm.reset();
+    });
+
+    cancelEditBtn.addEventListener('click', function() {
+        editModal.classList.add('hidden');
+        editForm.reset();
+    });
 </script>
 
 

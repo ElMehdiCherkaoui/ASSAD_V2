@@ -23,68 +23,15 @@ class Animal
         $this->id_habitat = $id_habitat;
     }
 
+    public function __get($name)
+    {
+        return $this->$name;
+    }
+    public function __set($name, $value)
+    {
+        $this->$name = $value;
+    }
 
-    public function getIdAni()
-    {
-        return $this->idAni;
-    }
-    public function getName()
-    {
-        return $this->name;
-    }
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-    public function getEspece()
-    {
-        return $this->espece;
-    }
-    public function setEspece($espece)
-    {
-        $this->espece = $espece;
-    }
-    public function getAlimentation()
-    {
-        return $this->alimentation;
-    }
-    public function setAlimentation($alimentation)
-    {
-        $this->alimentation = $alimentation;
-    }
-    public function getImage()
-    {
-        return $this->image;
-    }
-    public function setImage($image)
-    {
-        $this->image = $image;
-    }
-    public function getPaysOrigine()
-    {
-        return $this->paysOrigine;
-    }
-    public function setPaysOrigine($paysOrigine)
-    {
-        $this->paysOrigine = $paysOrigine;
-    }
-    public function getDescriptionCourte()
-    {
-        return $this->descriptionCourte;
-    }
-    public function setDescriptionCourte($descriptionCourte)
-    {
-        $this->descriptionCourte = $descriptionCourte;
-    }
-    public function getIdHabitat()
-    {
-        return $this->id_habitat;
-    }
-    public function setIdHabitat($id_habitat)
-    {
-        $this->id_habitat = $id_habitat;
-    }
-    
     public function __toString()
     {
         return "Animal (ID: {$this->idAni}, Name: {$this->name}, Espece: {$this->espece}, Alimentation: {$this->alimentation}, Image: {$this->image}, PaysOrigine: {$this->paysOrigine}, Description: {$this->descriptionCourte}, HabitatID: {$this->id_habitat})";
@@ -165,4 +112,6 @@ class Animal
         $stmt->bindParam(":idAni", $idAnii);
         return $stmt->execute();
     }
+    public function findByHabitat($habitatId) {}
+    public function findByCountry($country) {}
 }

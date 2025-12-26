@@ -108,7 +108,7 @@ VALUES (
 
 select * from users;
 
-SELECT * FROM userComments;
+SELECT * FROM visitesguidees;
 
 
 SELECT paysOrigine AS country, COUNT(*) AS total FROM Animal GROUP BY paysOrigine;

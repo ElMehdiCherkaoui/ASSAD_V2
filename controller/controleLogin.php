@@ -15,6 +15,7 @@ class ControleLogin
 
     public function controlleLogin()
     {
+        session_start();
         if (empty($this->email) || empty($this->password)) {
             return "All fields are required";
         }

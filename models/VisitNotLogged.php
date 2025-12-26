@@ -9,10 +9,11 @@ class VisitNotLogged extends User
         parent::__construct($idUser, $name, $email, $role, $password, $status);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return "User (ID: {$this->getIdUser()}, Name: {$this->getName()}, Email: {$this->getEmail()}, Role: {$this->getRole()}, Status: {$this->getStatus()})";
+        return "User (ID: {$this->idUser}, Name: {$this->name}, Email: {$this->email}, Role: {$this->role}, Status: {$this->status})";
     }
+
 
 
     public function login($email)

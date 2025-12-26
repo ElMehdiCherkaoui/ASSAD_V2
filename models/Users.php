@@ -1,12 +1,12 @@
 <?php
 class User
 {
-    private int $idUser;
-    private string $name;
-    private string $email;
-    private string $role;
-    private string $password;
-    private string $status;
+    private  $idUser;
+    private  $name;
+    private  $email;
+    private  $role;
+    private  $password;
+    private  $status;
 
     public function __construct($idUser = null, $name = null, $email = null, $role = null, $password = null, $status = null)
     {
@@ -17,60 +17,13 @@ class User
         $this->password = $password;
         $this->status = $status;
     }
-
-    public function getIdUser()
+    public function __get($name)
     {
-        return $this->idUser;
+        return $this->$name;
     }
-
-    public function getName()
+    public function __set($name, $value)
     {
-        return $this->name;
-    }
-
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    public function setEmail($email)
-    {
-        $this->email = $email;
-    }
-
-    public function getRole()
-    {
-        return $this->role;
-    }
-
-    public function setRole($role)
-    {
-        $this->role = $role;
-    }
-
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    public function setPassword($password)
-    {
-        $this->password = $password;
-    }
-
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    public function setStatus($status)
-    {
-        $this->status = $status;
+        $this->$name = $value;
     }
 
     public function __toString()
@@ -85,10 +38,57 @@ class User
         $db = $database->getConnection();
 
         $sql = "SELECT 
-        *SELECT * FROM users WHERE userRole != 'Admin'";
+         * FROM users WHERE userRole != 'Admin'";
         $stmt = $db->prepare($sql);
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+
+
+    function logout()
+    {
+        session_start();
+        session_unset();
+        session_destroy();
+    }
+
+    public function activeUser(int $userId): bool
+    {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $sql = "UPDATE users SET userStatus = 'Active' WHERE Users_id = :idUser";
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindParam(':idUser', $userId);
+
+        return $stmt->execute();
+    }
+
+    public function DisableUser(int $userId): bool
+    {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $sql = "UPDATE users SET userStatus = 'Disabled' WHERE Users_id = :idUser";
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindParam(':idUser', $userId);
+
+        return $stmt->execute();
+    }
+
+    public function approveGuide(int $userId): bool
+    {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $sql = "UPDATE users SET userStatus = 'Active' WHERE Users_id = :idUser";
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindParam(':idUser', $userId);
+
+        return $stmt->execute();
     }
 }

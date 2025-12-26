@@ -20,54 +20,17 @@ class EtapVisits
         $this->orderEtap = $orderEtap;
         $this->visitGuideEtapId = $visitGuideEtapId;
     }
-
-    public function getIdEtapVisit()
+    public function __get($name)
     {
-        return $this->idEtapVisit;
+        return $this->$name;
     }
-
-    public function getTitleEtap()
+    public function __set($name, $value)
     {
-        return $this->titleEtap;
-    }
-
-    public function setTitleEtap($titleEtap)
-    {
-        $this->titleEtap = $titleEtap;
-    }
-
-    public function getDescriptionEtap()
-    {
-        return $this->descriptionEtap;
-    }
-
-    public function setDescriptionEtap($descriptionEtap)
-    {
-        $this->descriptionEtap = $descriptionEtap;
-    }
-
-    public function getOrderEtap()
-    {
-        return $this->orderEtap;
-    }
-
-    public function setOrderEtap($orderEtap)
-    {
-        $this->orderEtap = $orderEtap;
-    }
-
-    public function getVisitGuideEtapId()
-    {
-        return $this->visitGuideEtapId;
-    }
-
-    public function setVisitGuideEtapId($visitGuideEtapId)
-    {
-        $this->visitGuideEtapId = $visitGuideEtapId;
+        $this->$name = $value;
     }
     public function __toString()
-{
-    return "EtapVisits (ID: {$this->idEtapVisit}, Title: {$this->titleEtap}, Description: {$this->descriptionEtap}, Order: {$this->orderEtap}, VisitGuideID: {$this->visitGuideEtapId})";
-}
-
+    {
+        return "EtapVisits (ID: {$this->idEtapVisit}, Title: {$this->titleEtap}, Description: {$this->descriptionEtap}, Order: {$this->orderEtap}, VisitGuideID: {$this->visitGuideEtapId})";
+    }
+    public function ajouterEtape() {}
 }

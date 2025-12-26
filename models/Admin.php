@@ -8,10 +8,11 @@ class Admin extends User
         parent::__construct($idUser, $name, $email, $role, $password);
     }
 
-    public function __toString(): string 
+    public function __toString(): string
     {
-        return "Admin (ID: {$this->getIdUser()}, Name: {$this->getName()}, Email: {$this->getEmail()}, Role: {$this->getRole()})";
+        return "Admin (ID: {$this->idUser}, Name: {$this->name}, Email: {$this->email}, Role: {$this->role})";
     }
+
 
     function changeStatus($userId, $statusChangee)
     {
@@ -26,4 +27,6 @@ class Admin extends User
         $stmt->bindParam(":idStatus", $statusChangee);
         return $stmt->execute();
     }
+
+
 }

@@ -1,3 +1,47 @@
+<?php
+session_start();
+require_once "../../config.php";
+require_once "../../models/VisiteGuidee.php";
+
+if (!empty($_POST['title']) && !empty($_POST['date'])) {
+
+    header("Location: list.php");
+    exit;
+}
+if (!empty($_POST['cancel_id'])) {
+    $visit = new VisiteGuidee();
+    $visit->cancel($_POST['cancel_id'], 'Desactive');
+    header("Location: list.php");
+    exit;
+}
+if (!empty($_POST['titles'])) {
+
+    $idVisite  = $_POST['ediguiId'];
+    $title     = $_POST['titles'];
+    $date      = $_POST['date'];
+    $duration  = $_POST['duration'];
+    $language  = $_POST['language'];
+    $capacity  = $_POST['capacity'];
+    $price     = $_POST['price'];
+
+
+    $visit = new VisiteGuidee();
+    $visit->idVisite  = $idVisite;
+    $visit->title     = $title;
+    $visit->dateTime  = $date;
+    $visit->duration  = $duration;
+    $visit->language  = $language;
+    $visit->capacity  = $capacity;
+    $visit->price     = $price;
+
+
+    if ($visit->update()) {
+        header("Location: list.php");
+        exit;
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,16 +51,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                colors: {
-                    primary: '#14532d',
-                    secondary: '#f59e0b',
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#14532d',
+                        secondary: '#f59e0b',
+                    }
                 }
             }
         }
-    }
     </script>
 </head>
 
@@ -54,7 +98,7 @@
                             <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
                         </tr>
                         <?php
-                        session_start();
+
                         require_once "../../models/VisiteGuidee.php";
                         require_once "../../config.php";
 
@@ -67,30 +111,43 @@
 
                                 $statusClass = $v['statut'] === 'Active' ? 'text-green-600' : 'text-red-600'; ?>
 
-                        <tr>
-                            <td class="px-6 py-4"><?= $v['title'] ?></td>
-                            <td class="px-6 py-4"><?= $v['date_time'] ?></td>
-                            <td class="px-6 py-4"><?= $v['languages'] ?></td>
-                            <td class="px-6 py-4"><?= $v['max_capacity'] ?></td>
-                            <td class="px-6 py-4"><?= $v['price'] ?> MAD</td>
-                            <td class="px-6 py-4"><span
-                                    class="<?= $statusClass ?> font-semibold"><?= htmlspecialchars($v['statut']) ?></span>
-                            </td>
-                            <td class="px-6 py-4 space-x-2">
-                                <a href="edit_visit.php?id=<?= $v['guided_id'] ?>"
-                                    class="px-3 py-1 bg-secondary text-black rounded hover:bg-amber-400">Edit</a>
-                                <a href="cancel_visit.php?id=<?= $v['guided_id'] ?>"
-                                    class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
-                                    onclick="return confirm('Are you sure you want to cancel this visit?')">Cancel</a>
-                            </td>
-                        </tr>
-                        <?php
+                                <tr>
+                                    <td class="px-6 py-4"><?= $v['title'] ?></td>
+                                    <td class="px-6 py-4"><?= $v['date_time'] ?></td>
+                                    <td class="px-6 py-4"><?= $v['languages'] ?></td>
+                                    <td class="px-6 py-4"><?= $v['max_capacity'] ?></td>
+                                    <td class="px-6 py-4"><?= $v['price'] ?> MAD</td>
+                                    <td class="px-6 py-4"><span
+                                            class="<?= $statusClass ?> font-semibold"><?= $v['statut'] ?></span>
+                                    </td>
+                                    <td class="px-6 py-4 space-x-2">
+
+                                        <button
+                                            class="px-3 py-1 bg-secondary text-black rounded hover:bg-amber-400 editVisitGuide"
+                                            data-id="<?= $v['guided_id'] ?>" data-title="<?= $v['title'] ?>"
+                                            data-date="<?= $v['date_time'] ?>" data-duration="<?= $v['duree'] ?>"
+                                            data-language="<?= $v['languages'] ?>" data-capacity="<?= $v['max_capacity'] ?>"
+                                            data-price="<?= $v['price'] ?>">
+                                            Edit
+                                        </button>
+
+
+                                        <?php if ($v['statut'] == 'Active'): ?>
+                                            <form method="post" style="display:inline;">
+                                                <input type="hidden" name="cancel_id" value="<?= $v['guided_id'] ?>">
+                                                <button type="submit"
+                                                    onclick="return confirm('Are you sure you want to cancel this visit?')"
+                                                    class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">
+                                                    Cancel
+                                                </button>
+                                            </form>
+                                        <?php endif ?>
+                                    </td>
+
+                                </tr>
+                            <?php
                             endforeach;
-                        else:
                             ?>
-                        <tr>
-                            <td colspan="7" class="text-center py-4">No visits found.</td>
-                        </tr>
                         <?php endif; ?>
 
                 </table>
@@ -244,6 +301,34 @@
     </div>
 
 </body>
-<script src="../../asset/js/ListGuidesPage.js"></script>
+<script>
+    const editButtons = document.querySelectorAll('.editVisitGuide');
+
+    editButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+
+            document.getElementById('ediguiId').value = button.dataset.id;
+            document.getElementById('titles').value = button.dataset.title;
+            document.getElementById('date').value = button.dataset.date;
+            document.getElementById('duration').value = button.dataset.duration;
+            document.getElementById('language').value = button.dataset.language;
+            document.getElementById('capacity').value = button.dataset.capacity;
+            document.getElementById('price').value = button.dataset.price;
+
+            document.getElementById('formPopup').classList.remove('hidden');
+        });
+    });
+
+
+    document.getElementById('closeEditModal').addEventListener('click', () => {
+        document.getElementById('formPopup').classList.add('hidden');
+    });
+</script>
+
+
+
+
+
+
 
 </html>

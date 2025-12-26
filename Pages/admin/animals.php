@@ -320,56 +320,56 @@ if (isset($_POST['delete_id'])) {
 </body>
 
 <script>
-    const addModal = document.getElementById('addAnimalPopup');
-    const openAddBtn = document.getElementById('addAnimalBtn');
-    const closeAddBtn = document.getElementById('closeModal');
-    const cancelAddBtn = document.getElementById('cancelBtn');
-    const addForm = document.getElementById('addAnimalForm');
+const addModal = document.getElementById('addAnimalPopup');
+const openAddBtn = document.getElementById('addAnimalBtn');
+const closeAddBtn = document.getElementById('closeModal');
+const cancelAddBtn = document.getElementById('cancelBtn');
+const addForm = document.getElementById('addAnimalForm');
 
-    openAddBtn.addEventListener('click', function() {
-        addModal.classList.remove('hidden');
+openAddBtn.addEventListener('click', function() {
+    addModal.classList.remove('hidden');
+});
+
+closeAddBtn.addEventListener('click', function() {
+    addModal.classList.add('hidden');
+
+});
+
+cancelAddBtn.addEventListener('click', function() {
+    addModal.classList.add('hidden');
+
+});
+
+const editModal = document.getElementById('editAnimalModal');
+const closeEditBtn = document.getElementById('closeEditModal');
+const cancelEditBtn = document.getElementById('cancelEditBtn');
+const editForm = document.getElementById('editAnimalForm');
+const editButtons = document.querySelectorAll('.editAnimalBtn');
+
+editButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+        document.getElementById('editAniId').value = button.dataset.id;
+        document.getElementById('editAnimalName').value = button.dataset.name;
+        document.getElementById('editEspece').value = button.dataset.espece;
+        document.getElementById('editAlimentation').value = button.dataset.alimentation;
+        document.getElementById('editImage').value = button.dataset.image;
+        document.getElementById('editPaysOrigine').value = button.dataset.pays;
+        document.getElementById('editDescription').value = button.dataset.description;
+        document.getElementById('editHabitatSelect').value = button.dataset.habitat;
+
+        editModal.classList.remove('hidden');
     });
+});
 
-    closeAddBtn.addEventListener('click', function() {
-        addModal.classList.add('hidden');
+closeEditBtn.addEventListener('click', () => {
+    editModal.classList.add('hidden');
+    editForm.reset();
+});
 
-    });
-
-    cancelAddBtn.addEventListener('click', function() {
-        addModal.classList.add('hidden');
-
-    });
-
-    const editModal = document.getElementById('editAnimalModal');
-    const closeEditBtn = document.getElementById('closeEditModal');
-    const cancelEditBtn = document.getElementById('cancelEditBtn');
-    const editForm = document.getElementById('editAnimalForm');
-    const editButtons = document.querySelectorAll('.editAnimalBtn');
-
-    editButtons.forEach(function(button) {
-        button.addEventListener('click', function() {
-            document.getElementById('editAniId').value = button.dataset.id;
-            document.getElementById('editAnimalName').value = button.dataset.name;
-            document.getElementById('editEspece').value = button.dataset.espece;
-            document.getElementById('editAlimentation').value = button.dataset.alimentation;
-            document.getElementById('editImage').value = button.dataset.image;
-            document.getElementById('editPaysOrigine').value = button.dataset.pays;
-            document.getElementById('editDescription').value = button.dataset.description;
-            document.getElementById('editHabitatSelect').value = button.dataset.habitat;
-
-            editModal.classList.remove('hidden');
-        });
-    });
-
-    closeEditBtn.addEventListener('click', function() {
-        editModal.classList.add('hidden');
-        editForm.reset();
-    });
-
-    cancelEditBtn.addEventListener('click', function() {
-        editModal.classList.add('hidden');
-        editForm.reset();
-    });
+cancelEditBtn.addEventListener('click', () => {
+    editModal.classList.add('hidden');
+    editForm.reset();
+});
 </script>
 
 

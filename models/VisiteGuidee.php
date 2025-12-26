@@ -104,15 +104,15 @@ class VisiteGuidee
         return $stmt->execute();
     }
 
-    public function cancel(): bool
+    public function cancel($idVisite,$status): bool
     {
         $database = new Database();
         $db = $database->getConnection();
 
         $sql = "UPDATE visitesGuidees SET statut = :status WHERE guided_id = :idVisite";
         $stmt = $db->prepare($sql);
-        $stmt->bindParam(':status', $this->status);
-        $stmt->bindParam(':idVisite', $this->idVisite);
+        $stmt->bindParam(':status', $status);
+        $stmt->bindParam(':idVisite', $idVisite);
         return $stmt->execute();
     }
 }

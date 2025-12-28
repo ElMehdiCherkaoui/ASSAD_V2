@@ -91,4 +91,29 @@ class User
 
         return $stmt->execute();
     }
+    public function totalVisitorsByCountry()
+    {
+        $database = new Database();
+        $db = $database->getConnection();
+
+
+
+        $stmt = $db->prepare("SELECT paysOrigine AS country, COUNT(*) AS total FROM Animal GROUP BY paysOrigine");
+        $stmt->execute();
+        return  $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function countPendingGuides()
+    {
+        $db = (new Database())->getConnection();
+        $stmt = $db->prepare("SELECT COUNT(*) as total FROM users WHERE userRole='Guide' AND userStatus='Pending'");
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    }
+    public function countUsers()
+    {
+        $db = (new Database())->getConnection();
+        $stmt = $db->prepare("SELECT COUNT(*) as total FROM users");
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    }
 }

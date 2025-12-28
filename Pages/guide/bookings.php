@@ -7,16 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                colors: {
-                    primary: '#14532d',
-                    secondary: '#f59e0b',
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#14532d',
+                        secondary: '#f59e0b',
+                    }
                 }
             }
         }
-    }
     </script>
 </head>
 
@@ -52,23 +52,37 @@
                     </tr>
                 </thead>
                 <tbody class="text-gray-800" id="UserContainer">
-                    <tr class="border-b">
-                        <td class="px-4 py-2">John Doe</td>
-                        <td class="px-4 py-2">African Safari Tour</td>
-                        <td class="px-4 py-2">2025-12-20 10:00</td>
-                        <td class="px-4 py-2">3</td>
-                        <td class="px-4 py-2"><span
-                                class="bg-green-100 text-green-800 px-2 py-1 rounded">Confirmed</span></td>
-                    </tr>
-                    <tr class="border-b">
-                        <td class="px-4 py-2">Sarah Smith</td>
-                        <td class="px-4 py-2">Atlas Lion Experience</td>
-                        <td class="px-4 py-2">2025-12-21 14:00</td>
-                        <td class="px-4 py-2">2</td>
-                        <td class="px-4 py-2"><span
-                                class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Pending</span></td>
-                    </tr>
+                    <?php
+                    require_once "../../models/Reservation.php";
+                    require_once "../../config.php";
+                    session_start();
+
+                    $reservation = new Reservation();
+                    $reservations = $reservation->listReservationGuidePage($_SESSION['user_id']);
+
+                    if (!empty($reservations)):
+                        foreach ($reservations as $r):
+
+                    ?>
+                            <tr class="border-b">
+                                <td class="px-4 py-2"><?= ($r['userName']) ?></td>
+                                <td class="px-4 py-2"><?= ($r['title']) ?></td>
+                                <td class="px-4 py-2"><?= ($r['date_time']) ?></td>
+                                <td class="px-4 py-2"><?= ($r['number_of_people']) ?></td>
+                                <td class="px-6 py-4"><span class="text-green-600 font-semibold">Confirmed</span></td>
+                            </tr>
+                        <?php
+                        endforeach;
+                    else:
+                        ?>
+                        <tr>
+                            <td colspan="5" class="px-4 py-2 text-center text-gray-500">
+                                No reservations found
+                            </td>
+                        </tr>
+                    <?php endif; ?>
                 </tbody>
+
             </table>
         </section>
 

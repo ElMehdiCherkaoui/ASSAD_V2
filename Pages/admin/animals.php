@@ -4,7 +4,7 @@ require_once '../../config.php';
 
 $animalModel = new Animal();
 
-// ====== ADD ANIMAL ======
+
 if (isset($_POST['animalName'])) {
     $animal = new Animal(
         null,
@@ -20,12 +20,10 @@ if (isset($_POST['animalName'])) {
     if ($animal->createAnimal()) {
         header("Location: animals.php");
         exit;
-    } else {
-        echo "<p class='text-red-500'>Error adding animal. Please try again.</p>";
     }
 }
 
-// ====== EDIT ANIMAL ======
+
 if (isset($_POST['editAniId'])) {
     $animal = new Animal(
         $_POST['editAniId'],
@@ -41,12 +39,10 @@ if (isset($_POST['editAniId'])) {
     if ($animal->updateAnimal()) {
         header("Location: animals.php");
         exit;
-    } else {
-        echo "<p class='text-red-500'>Error updating animal</p>";
     }
 }
 
-// ====== DELETE ANIMAL ======
+
 if (isset($_POST['delete_id'])) {
     $animalToDelete = new Animal();
 
@@ -121,11 +117,11 @@ if (isset($_POST['delete_id'])) {
                     foreach ($allAnimals as $index => $animal) {
                         echo '<tr>';
 
-                        echo '<td class="px-6 py-4">' . ($index + 1) . '</td>';
+                        echo '<td class="px-6 py-4 ">' . ($index + 1) . '</td>';
 
                         echo '<td class="px-6 py-4">' . $animal->animalName . '</td>';
 
-                        echo '<td class="px-6 py-4">' . $animal->espece . '</td>';
+                        echo '<td class="px-6 py-4">' . $animal->espèce . '</td>';
 
                         echo '<td class="px-6 py-4">' . $animal->habitatsName . '</td>';
 
@@ -135,14 +131,14 @@ if (isset($_POST['delete_id'])) {
                         echo '<img src="' . $animal->Image . '" class="w-12 h-12 rounded">';
                         echo '</td>';
 
-                        echo '<td class="px-6 py-4 space-x-2">';
+                        echo '<td class="px-6 py-4 space-x-2 w-[12em]">';
 
                         echo '<button 
                         type="button"
                         class="editAnimalBtn bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
                         data-id="' . $animal->Ani_id . '"
                         data-name="' . $animal->animalName . '"
-                        data-espece="' . $animal->espece . '"
+                        data-espece="' . $animal->espèce . '"
                         data-alimentation="' . $animal->alimentation . '"
                         data-image="' . $animal->Image . '"
                         data-pays="' . $animal->paysOrigine . '"
@@ -154,7 +150,6 @@ if (isset($_POST['delete_id'])) {
                         <input type="hidden" name="delete_id" value="' . $animal->Ani_id . '">
                         <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
                         Delete
-                        onclick="return confirm(\'Are you sure you want to delete this habitat?\')">
                         </button>
                         </form>';
 
@@ -205,7 +200,7 @@ if (isset($_POST['delete_id'])) {
                             $allHabitats = $habitatModel->findAll();
 
                             foreach ($allHabitats as $habitat) {
-                                echo '<option value="' . $habitat->Hab_id . '">' . htmlspecialchars($habitat->habitatsName) . '</option>';
+                                echo '<option value="' . $habitat->Hab_id . '">' . ($habitat->habitatsName) . '</option>';
                             }
                             ?>
                         </select>
@@ -280,7 +275,7 @@ if (isset($_POST['delete_id'])) {
                             $allHabitats = $habitatModel->findAll();
 
                             foreach ($allHabitats as $habitat) {
-                                echo '<option value="' . $habitat->Hab_id . '">' . htmlspecialchars($habitat->habitatsName) . '</option>';
+                                echo '<option value="' . $habitat->Hab_id . '">' . ($habitat->habitatsName) . '</option>';
                             }
                             ?>
                         </select>
@@ -320,56 +315,56 @@ if (isset($_POST['delete_id'])) {
 </body>
 
 <script>
-const addModal = document.getElementById('addAnimalPopup');
-const openAddBtn = document.getElementById('addAnimalBtn');
-const closeAddBtn = document.getElementById('closeModal');
-const cancelAddBtn = document.getElementById('cancelBtn');
-const addForm = document.getElementById('addAnimalForm');
+    const addModal = document.getElementById('addAnimalPopup');
+    const openAddBtn = document.getElementById('addAnimalBtn');
+    const closeAddBtn = document.getElementById('closeModal');
+    const cancelAddBtn = document.getElementById('cancelBtn');
+    const addForm = document.getElementById('addAnimalForm');
 
-openAddBtn.addEventListener('click', function() {
-    addModal.classList.remove('hidden');
-});
-
-closeAddBtn.addEventListener('click', function() {
-    addModal.classList.add('hidden');
-
-});
-
-cancelAddBtn.addEventListener('click', function() {
-    addModal.classList.add('hidden');
-
-});
-
-const editModal = document.getElementById('editAnimalModal');
-const closeEditBtn = document.getElementById('closeEditModal');
-const cancelEditBtn = document.getElementById('cancelEditBtn');
-const editForm = document.getElementById('editAnimalForm');
-const editButtons = document.querySelectorAll('.editAnimalBtn');
-
-editButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-        document.getElementById('editAniId').value = button.dataset.id;
-        document.getElementById('editAnimalName').value = button.dataset.name;
-        document.getElementById('editEspece').value = button.dataset.espece;
-        document.getElementById('editAlimentation').value = button.dataset.alimentation;
-        document.getElementById('editImage').value = button.dataset.image;
-        document.getElementById('editPaysOrigine').value = button.dataset.pays;
-        document.getElementById('editDescription').value = button.dataset.description;
-        document.getElementById('editHabitatSelect').value = button.dataset.habitat;
-
-        editModal.classList.remove('hidden');
+    openAddBtn.addEventListener('click', function() {
+        addModal.classList.remove('hidden');
     });
-});
 
-closeEditBtn.addEventListener('click', () => {
-    editModal.classList.add('hidden');
-    editForm.reset();
-});
+    closeAddBtn.addEventListener('click', function() {
+        addModal.classList.add('hidden');
 
-cancelEditBtn.addEventListener('click', () => {
-    editModal.classList.add('hidden');
-    editForm.reset();
-});
+    });
+
+    cancelAddBtn.addEventListener('click', function() {
+        addModal.classList.add('hidden');
+
+    });
+
+    const editModal = document.getElementById('editAnimalModal');
+    const closeEditBtn = document.getElementById('closeEditModal');
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+    const editForm = document.getElementById('editAnimalForm');
+    const editButtons = document.querySelectorAll('.editAnimalBtn');
+
+    editButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            document.getElementById('editAniId').value = button.dataset.id;
+            document.getElementById('editAnimalName').value = button.dataset.name;
+            document.getElementById('editEspece').value = button.dataset.espece;
+            document.getElementById('editAlimentation').value = button.dataset.alimentation;
+            document.getElementById('editImage').value = button.dataset.image;
+            document.getElementById('editPaysOrigine').value = button.dataset.pays;
+            document.getElementById('editDescription').value = button.dataset.description;
+            document.getElementById('editHabitatSelect').value = button.dataset.habitat;
+
+            editModal.classList.remove('hidden');
+        });
+    });
+
+    closeEditBtn.addEventListener('click', () => {
+        editModal.classList.add('hidden');
+        editForm.reset();
+    });
+
+    cancelEditBtn.addEventListener('click', () => {
+        editModal.classList.add('hidden');
+        editForm.reset();
+    });
 </script>
 
 

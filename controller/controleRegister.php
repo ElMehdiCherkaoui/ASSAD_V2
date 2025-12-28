@@ -17,25 +17,38 @@ class ControleRegister
     }
 
     public function Register($name, $email, $role, $password)
-    {
-        $status = ($role === "Guide") ? "Pending" : "Active";
+{
+    $status = ($role === "Guide") ? "Pending" : "Active";
 
-        if ($this->CheckEmail($email) > 0) {
-            return "Email duplicated";
-        }
-
-        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-
-        $register = new VisitNotLogged();
-        $user = $register->register($name, $email, $role, $passwordHash, $status);
-
-        if ($user) {
-            header("Location: ../Pages/login.php");
-            exit;
-        } else {
-            return "Fatal error";
-        }
+    if (!preg_match("/^[a-zA-Z\s]{3,}$/", $name)) {
+        return "Invalid name";
     }
+
+    if (!preg_match("/^[^\s@]+@[^\s@]+\.[^\s@]+$/", $email)) {
+        return "Invalid email";
+    }
+
+    if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/", $password)) {
+        return "Weak password";
+    }
+
+    if ($this->CheckEmail($email) > 0) {
+        return "Email duplicated";
+    }
+
+    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+    $register = new VisitNotLogged();
+    $user = $register->register($name, $email, $role, $passwordHash, $status);
+
+    if ($user) {
+        header("Location: ../Pages/login.php");
+        exit;
+    } else {
+        return "Fatal error";
+    }
+}
+
 }
 
 $registerControl = new ControleRegister();
@@ -45,3 +58,4 @@ if ($error) {
     header("Location: ../Pages/register.php?error=$error");
     exit;
 }
+

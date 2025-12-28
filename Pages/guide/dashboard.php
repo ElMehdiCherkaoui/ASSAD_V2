@@ -14,16 +14,16 @@ if (!isset($_SESSION['user_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                colors: {
-                    primary: '#14532d',
-                    secondary: '#f59e0b',
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#14532d',
+                        secondary: '#f59e0b',
+                    }
                 }
             }
         }
-    }
     </script>
 </head>
 
@@ -62,29 +62,50 @@ if (!isset($_SESSION['user_id'])) {
                             <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-200" id="UserReservedContainer">
-                        <tr>
-                            <td class="px-6 py-4">Alice Smith</td>
-                            <td class="px-6 py-4">African Safari Tour</td>
-                            <td class="px-6 py-4">2025-01-10</td>
-                            <td class="px-6 py-4">3</td>
-                            <td class="px-6 py-4"><span class="text-green-600 font-semibold">Confirmed</span></td>
-                        </tr>
-                        <tr>
-                            <td class="px-6 py-4">Bob Johnson</td>
-                            <td class="px-6 py-4">Lion Exploration</td>
-                            <td class="px-6 py-4">2025-01-12</td>
-                            <td class="px-6 py-4">2</td>
-                            <td class="px-6 py-4"><span class="text-yellow-600 font-semibold">Pending</span></td>
-                        </tr>
-                        <tr>
-                            <td class="px-6 py-4">Clara Lee</td>
-                            <td class="px-6 py-4">Bird Paradise</td>
-                            <td class="px-6 py-4">2025-01-15</td>
-                            <td class="px-6 py-4">4</td>
-                            <td class="px-6 py-4"><span class="text-green-600 font-semibold">Confirmed</span></td>
-                        </tr>
+                    <tbody class="divide-y divide-gray-200">
+                        <?php
+                        require_once "../../models/Reservation.php";
+                        require_once "../../config.php";
+
+                        $reservation = new Reservation();
+                        $reservations = $reservation->listReservationGuidePage($_SESSION['user_id']);
+
+                        if (!empty($reservations)):
+                            foreach ($reservations as $r):
+
+
+                        ?>
+                                <tr>
+                                    <td class="px-6 py-4">
+                                        <?= $r['userName'] ?>
+                                    </td>
+
+                                    <td class="px-6 py-4">
+                                        <?= $r['title'] ?>
+                                    </td>
+
+                                    <td class="px-6 py-4">
+                                        <?= ($r['date_time']) ?>
+                                    </td>
+
+                                    <td class="px-6 py-4">
+                                        <?= ($r['number_of_people']) ?>
+                                    </td>
+
+                                    <td class="px-6 py-4">
+                                        <span class="<?= $statusClass ?> font-semibold text-green-600">
+                                            Confirmed
+                                        </span>
+                                    </td>
+                                </tr>
+                            <?php
+                            endforeach;
+
+                            ?>
+
+                        <?php endif; ?>
                     </tbody>
+
                 </table>
             </div>
         </section>
@@ -92,6 +113,7 @@ if (!isset($_SESSION['user_id'])) {
     </main>
 
 </body>
-<script src="../../asset/js/UserGuideReservation.js"></script>
+<script>
+</script>
 
 </html>

@@ -1,3 +1,11 @@
+<?php
+require_once "../../config.php";
+require_once "../../models/VisiteGuidee.php";
+
+$visit = new VisiteGuidee();
+$visits = $visit->findAll();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,16 +15,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#14532d',
-                        secondary: '#f59e0b',
-                    }
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    primary: '#14532d',
+                    secondary: '#f59e0b',
                 }
             }
         }
+    }
     </script>
 </head>
 
@@ -50,41 +58,43 @@
     <section class="max-w-7xl mx-auto px-6 py-10">
         <div class="grid md:grid-cols-3 gap-8" id="GuidesBookContainner">
 
+            <?php if (!empty($visits)): ?>
+            <?php foreach ($visits as $v): ?>
+
             <div class="bg-white rounded-xl shadow overflow-hidden">
-                <img src="../assets/visits/lion-tour.jpg" alt="Atlas Lion Tour" class="w-full h-48 object-cover">
                 <div class="p-6 text-center">
-                    <h3 class="text-xl font-semibold mb-2">Atlas Lion Virtual Tour</h3>
-                    <p class="text-gray-600 mb-2">Date: 2025-12-20 | Duration: 2 hours</p>
-                    <p class="text-gray-600 mb-4">Price: $15 | Language: English | Remaining: 8 seats</p>
-                    <a href="book.php?id=1"
-                        class="bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-900">Book Now</a>
+                    <h3 class="text-xl font-semibold mb-2">
+                        <?php echo $v->title; ?>
+                    </h3>
+
+                    <p class="text-gray-600 mb-2">
+                        Date: <?php echo $v->date_time; ?> |
+                        Duration: <?php echo $v->duree; ?> hours
+                    </p>
+
+                    <p class="text-gray-600 mb-4">
+                        Price: $<?php echo $v->price; ?> |
+                        Language: <?php echo $v->languages; ?> |
+                        Remaining: <?php echo $v->max_capacity; ?> seats
+                    </p>
+
+                    <a href="book.php?id=<?php echo $v->guided_id; ?>"
+                        class="bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-900">
+                        Book Now
+                    </a>
                 </div>
             </div>
 
-            <div class="bg-white rounded-xl shadow overflow-hidden">
-                <img src="../assets/visits/elephant-tour.jpg" alt="Elephant Tour" class="w-full h-48 object-cover">
-                <div class="p-6 text-center">
-                    <h3 class="text-xl font-semibold mb-2">African Elephant Experience</h3>
-                    <p class="text-gray-600 mb-2">Date: 2025-12-22 | Duration: 1.5 hours</p>
-                    <p class="text-gray-600 mb-4">Price: $12 | Language: French | Remaining: 5 seats</p>
-                    <a href="book.php?id=2"
-                        class="bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-900">Book Now</a>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl shadow overflow-hidden">
-                <img src="../assets/visits/zebra-tour.jpg" alt="Zebra Tour" class="w-full h-48 object-cover">
-                <div class="p-6 text-center">
-                    <h3 class="text-xl font-semibold mb-2">Zebra Habitat Tour</h3>
-                    <p class="text-gray-600 mb-2">Date: 2025-12-25 | Duration: 1 hour</p>
-                    <p class="text-gray-600 mb-4">Price: $10 | Language: English | Remaining: 12 seats</p>
-                    <a href="book.php?id=3"
-                        class="bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-900">Book Now</a>
-                </div>
-            </div>
+            <?php endforeach; ?>
+            <?php else: ?>
+            <p class="col-span-3 text-center text-gray-500">
+                No visits available
+            </p>
+            <?php endif; ?>
 
         </div>
     </section>
+
 
     <footer class="bg-gray-900 text-gray-300 py-6 mt-16">
         <div class="text-center text-sm">
@@ -93,6 +103,8 @@
     </footer>
 
 </body>
-<script src="../../asset/js/guideVisitsPage.js"></script>
+<script>
+
+</script>
 
 </html>

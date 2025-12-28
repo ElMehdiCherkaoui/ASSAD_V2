@@ -1,3 +1,30 @@
+<?php
+session_start();
+require_once "../../models/Reservation.php";
+require_once "../../config.php";
+require_once "../../models/commentaire.php";
+
+$reservationModel = new Reservation();
+$commentaire = new Commentaire();
+
+$reservations = $reservationModel->listReservationVisitPage($_SESSION['user_id']);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $reservationId = (INT)$_POST['reservation_id'];
+    $comment = $_POST['comment'];
+    $rating = (INT)$_POST['rating'];
+    $userId = (INT)$_SESSION['user_id'];
+
+    $tourId = $reservation->tour_id_reservation_fk;
+
+    $commentaire->addComment($reservationId, $userId, $comment, $rating);
+
+    header("Location: my-reservations.php");
+    exit;
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,16 +34,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#14532d',
-                        secondary: '#f59e0b',
-                    }
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    primary: '#14532d',
+                    secondary: '#f59e0b',
                 }
             }
         }
+    }
     </script>
 </head>
 
@@ -52,7 +79,9 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-primary text-white">
                     <tr>
-
+                        <th class="px-6 py-3 text-left text-sm font-semibold">visit title</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold">date</th>
+                        <th class="px-6 py-3 text-left text-sm font-semibold">language</th>
                         <th class="px-6 py-3 text-left text-sm font-semibold">Number of People</th>
                         <th class="px-6 py-3 text-left text-sm font-semibold">Status</th>
                         <th class="px-6 py-3 text-left text-sm font-semibold">Action</th>
@@ -61,60 +90,43 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200" id="ReservationContainer">
+
+                    <?php if (!empty($reservations)): ?>
+                    <?php foreach ($reservations as $r): ?>
                     <tr>
-                        <td class="px-6 py-4">Atlas Lion Virtual Tour</td>
-                        <td class="px-6 py-4">2025-12-20 | 10:00 AM</td>
-                        <td class="px-6 py-4">English</td>
-                        <td class="px-6 py-4">2</td>
+                        <td class="px-6 py-4"><?php echo $r['title']; ?></td>
+                        <td class="px-6 py-4"><?php echo $r['date_time']; ?></td>
+                        <td class="px-6 py-4"><?php echo $r['languages']; ?></td>
+                        <td class="px-6 py-4"><?php echo $r['number_of_people']; ?></td>
+
                         <td class="px-6 py-4 text-green-600 font-semibold">Confirmed</td>
+
                         <td class="px-6 py-4">
-                            <a href="cancel.php?id=1" class="text-red-500 font-semibold hover:underline">Cancel</a>
+                            <a href="cancel.php?id=<?php echo $r['reservation_id']; ?>"
+                                class="text-red-500 font-semibold hover:underline">Cancel</a>
                         </td>
+
                         <td class="px-6 py-4">
-                            <button onclick="openCommentForm()"
+                            <button
+                                onclick="openComment(<?php echo $r['guided_id']; ?>, '<?php echo addslashes($r['title']); ?>')"
                                 class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
                                 Comment / Rate
                             </button>
+
+
                         </td>
-
                     </tr>
-
+                    <?php endforeach; ?>
+                    <?php else: ?>
                     <tr>
-                        <td class="px-6 py-4">African Elephant Experience</td>
-                        <td class="px-6 py-4">2025-12-22 | 2:00 PM</td>
-                        <td class="px-6 py-4">French</td>
-                        <td class="px-6 py-4">1</td>
-                        <td class="px-6 py-4 text-yellow-500 font-semibold">Pending</td>
-                        <td class="px-6 py-4">
-                            <a href="cancel.php?id=2" class="text-red-500 font-semibold hover:underline">Cancel</a>
+                        <td colspan="7" class="text-center text-gray-500 py-4">
+                            You have no reservations
                         </td>
-                        <td class="px-6 py-4">
-                            <button onclick="openCommentForm(1, 'Atlas Lion Virtual Tour')"
-                                class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
-                                Comment / Rate
-                            </button>
-                        </td>
-
                     </tr>
+                    <?php endif; ?>
 
-                    <tr>
-                        <td class="px-6 py-4">Zebra Habitat Tour</td>
-                        <td class="px-6 py-4">2025-12-25 | 11:00 AM</td>
-                        <td class="px-6 py-4">English</td>
-                        <td class="px-6 py-4">3</td>
-                        <td class="px-6 py-4 text-green-600 font-semibold">Confirmed</td>
-                        <td class="px-6 py-4">
-                            <a href="cancel.php?id=3" class="text-red-500 font-semibold hover:underline">Cancel</a>
-                        </td>
-                        <td class="px-6 py-4">
-                            <button onclick="openCommentForm(1, 'Atlas Lion Virtual Tour')"
-                                class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
-                                Comment / Rate
-                            </button>
-                        </td>
-
-                    </tr>
                 </tbody>
+
             </table>
         </div>
     </section>
@@ -122,25 +134,31 @@
     <div id="commentModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white rounded-xl p-6 w-96">
             <h2 class="text-xl font-bold mb-4" id="modalTourName">Leave a Comment</h2>
-            <input type="hidden" id="modalReservationId">
 
-            <textarea id="commentText" class="w-full border rounded p-2 mb-3" placeholder="Your comment"></textarea>
+            <form method="POST">
+                <input type="hidden" name="reservation_id" id="modalReservationId">
 
-            <select id="rating" class="w-full border rounded p-2 mb-3">
-                <option value="">Select rating</option>
-                <option value="1">1 ⭐</option>
-                <option value="2">2 ⭐⭐</option>
-                <option value="3">3 ⭐⭐⭐</option>
-                <option value="4">4 ⭐⭐⭐⭐</option>
-                <option value="5">5 ⭐⭐⭐⭐⭐</option>
-            </select>
+                <textarea name="comment" id="commentText" class="w-full border rounded p-2 mb-3"
+                    placeholder="Your comment" required></textarea>
 
-            <div class="flex justify-end gap-2">
-                <button onclick="closeCommentForm()" class="px-3 py-1 rounded border">Cancel</button>
-                <button onclick="submitComment()" class="px-3 py-1 rounded bg-green-500 text-white">Submit</button>
-            </div>
+                <select name="rating" id="rating" class="w-full border rounded p-2 mb-3" required>
+                    <option value="">Select rating</option>
+                    <option value="1">1 ⭐</option>
+                    <option value="2">2 ⭐⭐</option>
+                    <option value="3">3 ⭐⭐⭐</option>
+                    <option value="4">4 ⭐⭐⭐⭐</option>
+                    <option value="5">5 ⭐⭐⭐⭐⭐</option>
+                </select>
+
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="closeCommentForm()" class="px-3 py-1 rounded border">Cancel</button>
+                    <button type="submit" class="px-3 py-1 rounded bg-green-500 text-white">Submit</button>
+                </div>
+            </form>
         </div>
     </div>
+
+
 
 
 
@@ -152,6 +170,21 @@
     </footer>
 
 </body>
-<script src="../../asset/js/MyReservationVisiteurLogged.js"></script>
+<script>
+function openComment(id, tourName) {
+    const modal = document.getElementById("commentModal");
+    modal.classList.remove("hidden");
+    document.getElementById("modalReservationId").value = id;
+    document.getElementById("modalTourName").innerText =
+        "Leave a Comment for: " + tourName;
+
+}
+
+function closeCommentForm() {
+    document.getElementById("commentModal").classList.add("hidden");
+    document.getElementById("commentText").value = "";
+    document.getElementById("rating").value = "";
+}
+</script>
 
 </html>

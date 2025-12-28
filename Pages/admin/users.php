@@ -87,9 +87,9 @@ if (isset($_POST['activate_id'])) {
 
                         echo '<tr>';
                         echo '<td class="px-6 py-4">' . $user->Users_id . '</td>';
-                        echo '<td class="px-6 py-4">' . htmlspecialchars($user->userName) . '</td>';
-                        echo '<td class="px-6 py-4">' . htmlspecialchars($user->userEmail) . '</td>';
-                        echo '<td class="px-6 py-4">' . htmlspecialchars($user->userRole) . '</td>';
+                        echo '<td class="px-6 py-4">' . ($user->userName) . '</td>';
+                        echo '<td class="px-6 py-4">' . ($user->userEmail) . '</td>';
+                        echo '<td class="px-6 py-4">' . ($user->userRole) . '</td>';
                         echo '<td class="px-6 py-4 ' . $statusColor . ' font-semibold">' . $statusText . '</td>';
                         echo '<td class="px-6 py-4 space-x-2">';
 

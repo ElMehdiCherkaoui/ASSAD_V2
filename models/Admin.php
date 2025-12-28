@@ -12,21 +12,7 @@ class Admin extends User
     {
         return "Admin (ID: {$this->idUser}, Name: {$this->name}, Email: {$this->email}, Role: {$this->role})";
     }
-
-
-    function changeStatus($userId, $statusChangee)
-    {
-        $database = new Database();
-        $db = $database->getConnection();
-
-
-        $sql = "UPDATE users SET userStatus = :idStatus WHERE Users_id = :idUser";
-        $stmt = $db->prepare($sql);
-
-        $stmt->bindParam(":idUser", $userId);
-        $stmt->bindParam(":idStatus", $statusChangee);
-        return $stmt->execute();
-    }
+    
 
 
 }

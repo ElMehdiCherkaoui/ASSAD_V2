@@ -1,3 +1,37 @@
+<?php
+require_once "../../config.php";
+require_once "../../models/Animal.php";
+require_once "../../models/Habitat.php";
+
+$animal = new Animal();
+$habitatModel = new Habitat();
+
+$habitatId = isset($_POST['habitat']) ? $_POST['habitat'] : "";
+$country   = isset($_POST['country']) ? $_POST['country'] : "";
+
+$animals = $animal->findAll();
+
+if ($habitatId != "") {
+    $animals = $animal->findByHabitat($habitatId);
+}
+
+if ($country != "") {
+    $animals = $animal->findByCountry($country);
+}
+
+$habitats = $habitatModel->findAll();
+
+$countries = [];
+$allAnimals = $animal->findAll();
+
+foreach ($allAnimals as $a) {
+    if (!in_array($a->paysOrigine, $countries)) {
+        $countries[] = $a->paysOrigine;
+    }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -49,55 +83,59 @@
     </section>
 
     <section class="max-w-7xl mx-auto px-6 py-10">
-        <div class="flex flex-col md:flex-row gap-4 mb-8">
-            <input type="text" id="searchName" placeholder="Search by name..."
-                class="flex-1 p-3 rounded-lg border border-gray-300">
 
-            <select id="habitatFilter" class="p-3 rounded-lg border border-gray-300">
+        <form method="POST" class="flex flex-col md:flex-row gap-4 mb-8">
+
+            <select name="habitat" class="p-3 rounded-lg border border-gray-300">
                 <option value="">All Habitats</option>
+                <?php foreach ($habitats as $h): ?>
+                <option value="<?php echo $h->Hab_id; ?>">
+                    <?php echo $h->habitatsName; ?>
+                </option>
+                <?php endforeach; ?>
             </select>
 
-            <select id="countryFilter" class="p-3 rounded-lg border border-gray-300">
+            <select name="country" class="p-3 rounded-lg border border-gray-300">
                 <option value="">All Countries</option>
+                <?php foreach ($countries as $c): ?>
+                <option value="<?php echo $c; ?>">
+                    <?php echo $c; ?>
+                </option>
+                <?php endforeach; ?>
             </select>
+
+            <button type="submit" class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-900">
+                Filter
+            </button>
+
+        </form>
+
+        <div class="grid md:grid-cols-3 gap-8">
+
+            <?php foreach ($animals as $ani): ?>
+
+            <div class="bg-white rounded-xl shadow overflow-hidden">
+                <img src="<?php echo $ani->Image; ?>" class="w-full h-48 object-cover">
+
+                <div class="p-6 text-center">
+                    <h3 class="text-xl font-semibold mb-2">
+                        <?php echo $ani->animalName; ?>
+                    </h3>
+
+                    <p class="text-gray-600 mb-4">
+                        Species: <?php echo $ani->espèce; ?> |
+                        Country: <?php echo $ani->paysOrigine; ?>
+                    </p>
+                </div>
+            </div>
+
+            <?php endforeach; ?>
+
         </div>
 
 
-        <div class="grid md:grid-cols-3 gap-8" id="animalContainer">
-            <div class="bg-white rounded-xl shadow overflow-hidden">
-                <img src="../assets/animals/lion.jpg" alt="Atlas Lion" class="w-full h-48 object-cover">
-                <div class="p-6 text-center">
-                    <h3 class="text-xl font-semibold mb-2">Atlas Lion – Asaad</h3>
-                    <p class="text-gray-600 mb-4">Species: Panthera leo leo | Country: Morocco</p>
-                    <a href="detail.php?id=1"
-                        class="bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-900">View
-                        Details</a>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl shadow overflow-hidden">
-                <img src="../assets/animals/elephant.jpg" alt="African Elephant" class="w-full h-48 object-cover">
-                <div class="p-6 text-center">
-                    <h3 class="text-xl font-semibold mb-2">African Elephant</h3>
-                    <p class="text-gray-600 mb-4">Species: Loxodonta africana | Country: Kenya</p>
-                    <a href="detail.php?id=2"
-                        class="bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-900">View
-                        Details</a>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl shadow overflow-hidden">
-                <img src="../assets/animals/zebra.jpg" alt="Zebra" class="w-full h-48 object-cover">
-                <div class="p-6 text-center">
-                    <h3 class="text-xl font-semibold mb-2">Zebra</h3>
-                    <p class="text-gray-600 mb-4">Species: Equus quagga | Country: South Africa</p>
-                    <a href="detail.php?id=3"
-                        class="bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-900">View
-                        Details</a>
-                </div>
-            </div>
-        </div>
     </section>
+
 
     <footer class="bg-gray-900 text-gray-300 py-6 mt-16">
         <div class="text-center text-sm">

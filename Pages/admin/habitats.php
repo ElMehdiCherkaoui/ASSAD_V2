@@ -96,10 +96,10 @@ if (isset($_POST['delete_id'])) {
                         echo '<tr>';
 
                         echo '<td class="px-6 py-4">' . $habitat->Hab_id . '</td>';
-                        echo '<td class="px-6 py-4">' . htmlspecialchars($habitat->habitatsName) . '</td>';
-                        echo '<td class="px-6 py-4">' . htmlspecialchars($habitat->typeClimat) . '</td>';
-                        echo '<td class="px-6 py-4">' . htmlspecialchars($habitat->zoo_zone) . '</td>';
-                        echo '<td class="px-6 py-4 w-[30em]">' . htmlspecialchars($habitat->descriptionHab) . '</td>';
+                        echo '<td class="px-6 py-4">' . ($habitat->habitatsName) . '</td>';
+                        echo '<td class="px-6 py-4">' . ($habitat->typeClimat) . '</td>';
+                        echo '<td class="px-6 py-4">' . ($habitat->zoo_zone) . '</td>';
+                        echo '<td class="px-6 py-4 w-[30em]">' . ($habitat->descriptionHab) . '</td>';
 
                         echo '<td class="px-6 py-4 space-x-2">';
 
@@ -107,10 +107,10 @@ if (isset($_POST['delete_id'])) {
                         <button
                             class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 editHabitatBtn"
                             data-id="' . $habitat->Hab_id . '"
-                            data-name="' . htmlspecialchars($habitat->habitatsName) . '"
-                            data-climat="' . htmlspecialchars($habitat->typeClimat) . '"
-                            data-zone="' . htmlspecialchars($habitat->zoo_zone) . '"
-                            data-desc="' . htmlspecialchars($habitat->descriptionHab) . '">
+                            data-name="' . ($habitat->habitatsName) . '"
+                            data-climat="' . ($habitat->typeClimat) . '"
+                            data-zone="' . ($habitat->zoo_zone) . '"
+                            data-desc="' . ($habitat->descriptionHab) . '">
                             Edit
                         </button>
                         ';

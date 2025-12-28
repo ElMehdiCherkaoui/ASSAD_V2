@@ -97,4 +97,11 @@ class Habitat
 
         return $stmt->execute();
     }
+    public function countHabitats() {
+    $db = (new Database())->getConnection();
+    $stmt = $db->prepare("SELECT COUNT(*) as total FROM Habitats");
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+}
+
 }

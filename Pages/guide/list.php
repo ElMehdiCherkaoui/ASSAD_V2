@@ -71,16 +71,16 @@ if (
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                colors: {
-                    primary: '#14532d',
-                    secondary: '#f59e0b',
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#14532d',
+                        secondary: '#f59e0b',
+                    }
                 }
             }
         }
-    }
     </script>
 </head>
 
@@ -129,45 +129,45 @@ if (
                         if (!empty($visits)) :
                             foreach ($visits as $v) :
 
-                                $statusClass = $v['statut'] === 'Active' ? 'text-green-600' : 'text-red-600'; ?>
+                                $statusClass = $v['statut'] === 'Open' ? 'text-green-600' : 'text-red-600'; ?>
 
-                        <tr>
-                            <td class="px-6 py-4"><?= $v['title'] ?></td>
-                            <td class="px-6 py-4"><?= $v['date_time'] ?></td>
-                            <td class="px-6 py-4"><?= $v['languages'] ?></td>
-                            <td class="px-6 py-4"><?= $v['max_capacity'] ?></td>
-                            <td class="px-6 py-4"><?= $v['price'] ?> MAD</td>
-                            <td class="px-6 py-4"><span
-                                    class="<?= $statusClass ?> font-semibold"><?= $v['statut'] ?></span>
-                            </td>
-                            <td class="px-6 py-4 space-x-2">
-                                <button onclick="openForm(<?= $v['guided_id'] ?>)"
-                                    class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 EtapsGuide">Etapes</button>
-                                <button
-                                    class="px-3 py-1 bg-secondary text-black rounded hover:bg-amber-400 editVisitGuide"
-                                    data-id="<?= $v['guided_id'] ?>" data-title="<?= $v['title'] ?>"
-                                    data-date="<?= $v['date_time'] ?>" data-duration="<?= $v['duree'] ?>"
-                                    data-language="<?= $v['languages'] ?>" data-capacity="<?= $v['max_capacity'] ?>"
-                                    data-price="<?= $v['price'] ?>">
-                                    Edit
-                                </button>
+                                <tr>
+                                    <td class="px-6 py-4"><?= $v['title'] ?></td>
+                                    <td class="px-6 py-4"><?= $v['date_time'] ?></td>
+                                    <td class="px-6 py-4"><?= $v['languages'] ?></td>
+                                    <td class="px-6 py-4"><?= $v['max_capacity'] ?></td>
+                                    <td class="px-6 py-4"><?= $v['price'] ?> MAD</td>
+                                    <td class="px-6 py-4"><span
+                                            class="<?= $statusClass ?> font-semibold"><?= $v['statut'] ?></span>
+                                    </td>
+                                    <td class="px-6 py-4 space-x-2">
+                                        <button onclick="openForm(<?= $v['guided_id'] ?>)"
+                                            class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 EtapsGuide">Etapes</button>
+                                        <button
+                                            class="px-3 py-1 bg-secondary text-black rounded hover:bg-amber-400 editVisitGuide"
+                                            data-id="<?= $v['guided_id'] ?>" data-title="<?= $v['title'] ?>"
+                                            data-date="<?= $v['date_time'] ?>" data-duration="<?= $v['duree'] ?>"
+                                            data-language="<?= $v['languages'] ?>" data-capacity="<?= $v['max_capacity'] ?>"
+                                            data-price="<?= $v['price'] ?>">
+                                            Edit
+                                        </button>
 
 
 
-                                <?php if ($v['statut'] == 'Active'): ?>
-                                <form method="post" style="display:inline;">
-                                    <input type="hidden" name="cancel_id" value="<?= $v['guided_id'] ?>">
-                                    <button type="submit"
-                                        onclick="return confirm('Are you sure you want to cancel this visit?')"
-                                        class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">
-                                        Cancel
-                                    </button>
-                                </form>
-                                <?php endif ?>
-                            </td>
+                                        <?php if ($v['statut'] == 'Open'): ?>
+                                            <form method="post" style="display:inline;">
+                                                <input type="hidden" name="cancel_id" value="<?= $v['guided_id'] ?>">
+                                                <button type="submit"
+                                                    onclick="return confirm('Are you sure you want to cancel this visit?')"
+                                                    class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">
+                                                    Cancel
+                                                </button>
+                                            </form>
+                                        <?php endif ?>
+                                    </td>
 
-                        </tr>
-                        <?php
+                                </tr>
+                            <?php
                             endforeach;
                             ?>
                         <?php endif; ?>
@@ -264,29 +264,29 @@ if (
             </form>
 
             <?php if (!empty($_POST['currentVisitId'])): ?>
-            <div id="stepsList" class="space-y-3 overflow-auto max-h-[30em]">
-                <?php
+                <div id="stepsList" class="space-y-3 overflow-auto max-h-[30em]">
+                    <?php
                     require_once "../../models/etapVisits.php";
 
                     $steps = (new EtapVisits())->listEtaps($_POST['currentVisitId']);
 
                     if (!empty($steps)):
                         foreach ($steps as $step): ?>
-                <div class="flex gap-3 p-4 bg-gray-100 rounded-lg">
-                    <div
-                        class="flex items-center justify-center w-10 h-10 bg-blue-600 text-white rounded-full font-bold">
-                        <?= htmlspecialchars($step['step_order']) ?>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-lg"><?= htmlspecialchars($step['step_title']) ?></h3>
-                        <p class="text-gray-600 text-sm"><?= htmlspecialchars($step['step_description']) ?></p>
-                    </div>
-                </div>
-                <?php endforeach; ?>
+                            <div class="flex gap-3 p-4 bg-gray-100 rounded-lg">
+                                <div
+                                    class="flex items-center justify-center w-10 h-10 bg-blue-600 text-white rounded-full font-bold">
+                                    <?= ($step['step_order']) ?>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-lg"><?= ($step['step_title']) ?></h3>
+                                    <p class="text-gray-600 text-sm"><?= ($step['step_description']) ?></p>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
 
-                <p class="text-gray-500">No steps found for this visit.</p>
-                <?php endif; ?>
-            </div>
+                        <p class="text-gray-500">No steps found for this visit.</p>
+                    <?php endif; ?>
+                </div>
             <?php endif; ?>
 
 
@@ -342,54 +342,54 @@ if (
 
 </body>
 <script>
-const editButtons = document.querySelectorAll('.editVisitGuide');
+    const editButtons = document.querySelectorAll('.editVisitGuide');
 
-editButtons.forEach((button) => {
-    button.addEventListener('click', () => {
+    editButtons.forEach((button) => {
+        button.addEventListener('click', () => {
 
-        document.getElementById('ediguiId').value = button.dataset.id;
-        document.getElementById('titles').value = button.dataset.title;
-        document.getElementById('date').value = button.dataset.date;
-        document.getElementById('duration').value = button.dataset.duration;
-        document.getElementById('language').value = button.dataset.language;
-        document.getElementById('capacity').value = button.dataset.capacity;
-        document.getElementById('price').value = button.dataset.price;
+            document.getElementById('ediguiId').value = button.dataset.id;
+            document.getElementById('titles').value = button.dataset.title;
+            document.getElementById('date').value = button.dataset.date;
+            document.getElementById('duration').value = button.dataset.duration;
+            document.getElementById('language').value = button.dataset.language;
+            document.getElementById('capacity').value = button.dataset.capacity;
+            document.getElementById('price').value = button.dataset.price;
 
-        document.getElementById('formPopup').classList.remove('hidden');
+            document.getElementById('formPopup').classList.remove('hidden');
+        });
     });
-});
 
 
-document.getElementById('closeEditModal').addEventListener('click', () => {
-    document.getElementById('formPopup').classList.add('hidden');
-});
+    document.getElementById('closeEditModal').addEventListener('click', () => {
+        document.getElementById('formPopup').classList.add('hidden');
+    });
 
-function openForm(id) {
-    document.getElementById('currentVisitId').value = id;
-    document.getElementById('stepsForm').submit();
-}
+    function openForm(id) {
+        document.getElementById('currentVisitId').value = id;
+        document.getElementById('stepsForm').submit();
+    }
 
-document.getElementById('closeModal').addEventListener("click", () => {
-    document.getElementById('stepsModal').classList.add('hidden');
-});
+    document.getElementById('closeModal').addEventListener("click", () => {
+        document.getElementById('stepsModal').classList.add('hidden');
+    });
 
-function openAddStepModal() {
-    document.getElementById('addStepModal').classList.remove('hidden');
-}
+    function openAddStepModal() {
+        document.getElementById('addStepModal').classList.remove('hidden');
+    }
 
-function closeAddStepModal() {
-    document.getElementById('addStepModal').classList.add('hidden');
-}
+    function closeAddStepModal() {
+        document.getElementById('addStepModal').classList.add('hidden');
+    }
 </script>
 
 <?php if (!empty($_POST['currentVisitId'])): ?>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById('stepsModal').classList.remove('hidden');
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById('stepsModal').classList.remove('hidden');
 
 
-});
-</script>
+        });
+    </script>
 <?php endif; ?>
 
 

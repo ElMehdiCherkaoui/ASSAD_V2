@@ -42,6 +42,31 @@ class VisiteGuidee
     {
         return "VisiteGuidee (ID: {$this->idVisitGuide}, Title: {$this->titleVisit}, Date/Time: {$this->dateHeureGuide}, Language: {$this->languageGuide}, Capacity: {$this->capacityMax}, Status: {$this->statusGuide}, Duration: {$this->dureeGuide}, Guide User ID: {$this->userGuideId})";
     }
+    public function findAll()
+    {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $sql = "SELECT * FROM visitesGuidees";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function findById($id)
+    {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $sql = "SELECT * FROM visitesGuidees WHERE guided_id = :id";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":id", $id);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_OBJ);
+    }
+
 
     public function listGuideVisit(int $guideId): array
     {
@@ -104,7 +129,7 @@ class VisiteGuidee
         return $stmt->execute();
     }
 
-    public function cancel($idVisite,$status): bool
+    public function cancel($idVisite, $status): bool
     {
         $database = new Database();
         $db = $database->getConnection();
@@ -115,4 +140,11 @@ class VisiteGuidee
         $stmt->bindParam(':idVisite', $idVisite);
         return $stmt->execute();
     }
+    public function countTours() {
+    $db = (new Database())->getConnection();
+    $stmt = $db->prepare("SELECT COUNT(*) as total FROM visitesGuidees");
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+}
+
 }

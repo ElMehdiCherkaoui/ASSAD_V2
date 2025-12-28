@@ -112,6 +112,37 @@ class Animal
         $stmt->bindParam(":idAni", $idAnii);
         return $stmt->execute();
     }
-    public function findByHabitat($habitatId) {}
-    public function findByCountry($country) {}
+    public function findByHabitat($habitatId)
+    {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $sql = "SELECT * FROM Animal WHERE Habitat_ID = :habitatId";
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":habitatId", $habitatId);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+    public function findByCountry($country)
+    {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $sql = "SELECT * FROM Animal WHERE paysOrigine = :country";
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":country", $country);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+    public function countAnimals() {
+    $db = (new Database())->getConnection();
+    $stmt = $db->prepare("SELECT COUNT(*) as total FROM Animal");
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+}
+
 }
